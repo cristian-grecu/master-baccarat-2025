@@ -266,6 +266,7 @@ Deliverables in folder `task1`:
 
 - Modified `card7seg.sv`
 - Modified `tb_card7seg.sv`
+- Any other modified/added source or test files for your design
 
 
 ### Task 5 [7 marks]
@@ -276,11 +277,11 @@ Deliverables in folder `task3`:
 - Modified `statemachine.sv`
 - Modified `scorehand.sv`
 - Modified `datapath.sv`
-- Modified `tb_card7seg.sv`
 - Modified `tb_statemachine.sv`
 - Modified `tb_scorehand.sv`
 - Modified `tb_datapath.sv`
-- Any other modified/added source files for your design
+- Modified `tb_lab1.sv`
+- Any other modified/added source or test files for your design
 
 The toplevel module of your design must be named `lab1`.
 
