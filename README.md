@@ -38,7 +38,7 @@ It may be tempting to write a software-like specification and hope that the synt
 
 ## Phase 1: Getting your environment ready
 
-Complete the design flow tutorial, distributed as Assignment 0. There are no deliverables for this task.
+Complete the design flow tutorial, distributed as the Lab 0 Tutorial. There are no deliverables for this task.
 
 
 ## Phase 2: Warmup
@@ -51,7 +51,7 @@ You will design a combinational block with four inputs and seven outputs:
 
 In this phase, the four inputs will be connected to switches 3 to 0 on your board, and the seven outputs are connected to a single seven-segment display on your board.
 
-The circuit operates as follows. The four inputs can be interpreted as representing a number between 0 and 15. Each number between 1 and 13 represents a specific card value in a deck of cards, as follows: Ace=1, number cards are represented as themselves, Jack=11, Queen=12, King=13. An input of 0 represents “no card” and input values of 14 and 15 will not be used; for the purposes of this Phase, you should display a blank if they do occur.
+The circuit operates as follows. The four inputs represent an unsigned, 4-bit binary number with a value between 0 and 15. Each number between 1 and 13 represents a specific card value in a deck of cards, as follows: Ace=1, number cards are represented as themselves, Jack=11, Queen=12, and King=13. An input of 0 represents “no card” and input values of 14 and 15 will not be used; for the purposes of this Phase, you should display a blank if they do occur.
 
 The output is a set of values that will display the value of the card on the seven segment display:
 
@@ -61,11 +61,11 @@ Each segment in the display is controlled by one of the `HEX` output lines. Note
 
 ### Task 1: A seven-segment LED driver
 
-Add your code to implement the Verilog stub in the `task1` folder. Create a project in Quartus, import the pin assignments, compile your design, download it to the board, and test your design. Remember to download the correct pin assignment file for the board you are using.
+Add your code to implement the Verilog stub in the `task1` folder. Create a project in Quartus, import the pin assignments, compile your design, download it to the board, and test your design. Remember to import the correct pin assignment file for the board you are using from the `settings` folder.
 
-Write a module with unit tests for the LED driver in `tb_card7seg.sv`. Your testbech module will be named `tb_card7seg` and will have no ports. This means it will need to instantiate `card7seg.sv`, as well as and drive any clock(s) in the design using the Verilog delay syntax (`#`). Be sure that your testbench covers **all cases**, even those for which the display is blank. You may use waveforms or text output (such as `$display`) to check whether your testbench works; we only care that it exercises the entire design under test.
+Write a module with unit tests for the LED driver in `tb_card7seg.sv`. Your testbech module will be named `tb_card7seg` and will have no ports. This means it will need to instantiate `card7seg.sv`, as well as and drive any clock(s) in the design using the Verilog delay syntax (`#`). Be sure that your testbench covers **all cases**, even those for which the display is blank. You may use waveforms or text output (such as `$display` r `$strobe`) to check whether your testbench works; we only care that it exercises the entire design under test.
 
-In fact, we strongly recommend writing the testbench **before** you start implementing the block in Verilog. This will force you to go through the specification carefully and make sure you really understand it, and will avoid leaking hidden assumptions from your design into your tests. Plus, it's very satisfying to finish your code and see that it passes all your tests!
+Even though this particular module isn't very complex, we strongly recommend writing the testbench **before** you start implementing the block in Verilog. You should approach all modules this way; you'll appreciate it later with more complex designs. This will force you to go through the specification carefully and make sure you really understand it, and will avoid leaking hidden assumptions from your design into your tests. Plus, it's very satisfying to finish your code and see that it passes all your tests!
 
 ## Phase 3: Baccarat!
 
@@ -75,9 +75,9 @@ The game of Baccarat is simple. There are various versions, but we will focus on
 
 #### Rules
 
-- Two cards are dealt to both the player and the dealer face up (first card to the player, second card to dealer, third card to the player, fourth card to the dealer).
+- Two cards are dealt to both the player and the dealer (i.e., the banker) face up (first card to the player, second card to dealer, third card to the player, fourth card to the dealer).
 - The score of each hand is computed as described under _Score_ below.
-- If the player’s or dealer’s hand has a score of 8 or 9, the game is over (this is called a “natural”) and whoever has the higher score wins (if the scores are the same, it is a tie)
+- If the player’s or banker’s hand has a score of 8 or 9, the game is over (this is called a “natural”) and whoever has the higher score wins (if the scores are the same, it is a tie)
 - Otherwise, if the player’s score from his/her first two cards was 0 to 5:
   - the player gets a third card
   - the banker may get a third card depending on the following rule:
@@ -182,7 +182,7 @@ In this task, you will create the testbenches and implement the design in Verilo
 
 <p align="center"><img src="figures/hierarchy.svg" width="40%" height="40%" title="block diagram"></p> 
 
-To get you started, stubs for each of the files are in the `task5` folder. Be sure to start with these, so that your interfaces for each module are correct. The `reg4` block is not shown in the diagram; you can either create a new module to describe a four-bit register, or write it directly into `datapath.sv` (your choice, either will work). To help you, we are giving you `dealcard.sv` and `lab1.sv`.
+To get you started, stubs for each of the files are in the `task5` folder. Be sure to start with these, so that your interfaces for each module are correct (**do not modify the interfaces**). The `reg4` block is not shown in the diagram; you can either create a new module to describe a four-bit register, or write it directly into `datapath.sv` (your choice, either will work). To help you, we are giving you `dealcard.sv` and `lab1.sv`.
 
 Start by writing unit tests for all your modules (you don't need to test `dealcard`, `card7seg`, or `reg4`). Each `tb_*.sv` file should test the corresponding module by providing inputs to the module's ports and examining the outputs, and test all of the code in the module. This also applies to the testbench for the toplevel module `lab1`, which should only interface with the `lab1` module and should not include the unit testbenches.
 
@@ -225,13 +225,13 @@ We strongly encourage you to commit and perhaps push changes as you make progres
 
 You should commit **only** source files (in this lab, .sv files). You do **not** need to commit synthesis results (e.g., .qof files), waveform dumps, temporary files, and so on.
 
-Any template files we give you (e.g., `card7seg.sv`) should be directly modified and committed, rather than copied and modified.
+Any template files we give you (e.g., `card7seg.sv`) should be directly modified and committed using the same filename, rather than copied and modified.
 
 NOTE: The repository created for you when you follow the assignment link is private by default. **Do not** make it public — that would violate the academic honesty rules for this course.
 
 ### Automatic testing
 
-We will be marking your code via an automatic testing infrastructure. Your autograder marks will depend on the fraction of the testcases your code passed (i.e., which features work as specified), and how many cases your testbenches cover.
+We will be marking your code via an automatic testing infrastructure. Your autograder marks will depend on the fraction of the testcases your code passed (i.e., which features work as specified), and how many cases your testbenches cover. Your autograder mark will also depend upon code coverge, which is the fraction of code tested by your testbench (you cannot measure this with the free version of ModelSim; we will test it with the full commercial version).
 
 It is essential that you understand how this works so that you submit the correct files — if our testsuite is unable to compile and test your code, you will not receive marks.
 
@@ -254,8 +254,9 @@ If your code does not compile and simulate under these conditions (e.g., because
 ### Marks
 
 The evaluation of your submission consists of two parts:
-- the TA demo, worth 30%, and
-- the autograder tests of your code and testbenches, worth 70%
+- the TA demo, worth 50%
+- whether you submitted your code to GitHub (automatic 0 if not done)
+- autograder testing of your code and testbenches, worth 50%
 
 (Task 7 is scored differently; see below).
 
