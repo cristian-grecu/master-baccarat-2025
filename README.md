@@ -262,7 +262,7 @@ The evaluation of your submission consists of two parts:
 
 ### Task 2 [2 marks]
 
-Deliverables in folder `task1`:
+Deliverables in folder `task1` (yes, that says task1):
 
 - Modified `card7seg.sv`
 - Modified `tb_card7seg.sv`
@@ -271,7 +271,7 @@ Deliverables in folder `task1`:
 
 ### Task 5 [7 marks]
 
-Deliverables in folder `task3`:
+Deliverables in folder `task5`:
 
 - Modified `card7seg.sv`
 - Modified `statemachine.sv`
