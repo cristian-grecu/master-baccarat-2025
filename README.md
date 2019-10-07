@@ -182,9 +182,9 @@ In this task, you will create the testbenches and implement the design in Verilo
 
 <p align="center"><img src="figures/hierarchy.svg" width="40%" height="40%" title="block diagram"></p> 
 
-To get you started, stubs for each of the files are in the `task5` folder. Be sure to start with these, so that your interfaces for each module are correct (**do not modify the interfaces**). The `reg4` block is not shown in the diagram; you can either create a new module to describe a four-bit register, or write it directly into `datapath.sv` (your choice, either will work). To help you, we are giving you `dealcard.sv` and `lab1.sv`.
+To get you started, stubs for each of the files are in the `task5` folder. Be sure to start with these, so that your interfaces for each module are correct (**do not modify the interfaces**). The `reg4` block is not shown in the diagram; you can either create a new module to describe a four-bit register, or write it directly into `datapath.sv` (your choice, either will work). To help you, we are giving you `dealcard.sv` and `task5.sv`.
 
-Start by writing unit tests for all your modules (you don't need to test `dealcard`, `card7seg`, or `reg4`). Each `tb_*.sv` file should test the corresponding module by providing inputs to the module's ports and examining the outputs, and test all of the code in the module. This also applies to the testbench for the toplevel module `lab1`, which should only interface with the `lab1` module and should not include the unit testbenches.
+Start by writing unit tests for all your modules (you don't need to test `dealcard`, `card7seg`, or `reg4`). Each `tb_*.sv` file should test the corresponding module by providing inputs to the module's ports and examining the outputs, and test all of the code in the module. This also applies to the testbench for the toplevel module `task5`, which should only interface with the `task5` module and should not include the unit testbenches.
 
 The hardest part of this lab is getting the state machine right. We strongly urge you to draw (on paper) a bubble diagram showing the states, the transitions, and outputs of each transition. You are strongly urged to make sure you have your state machine bubble diagram done by the end of your Working Week lab. If you are unclear how to do this, be sure to discuss with your TA during the lab period. When drawing your diagram for your state machine, make sure that you cover all of the possible input conditions.
 
@@ -247,7 +247,7 @@ The autograder will instantiate and test each module exactly the way it is defin
 1. You must not **rename any modules, ports, or signals** in the provided skeleton files.
 1. You must not **alter the width or polarity of any signal** in the skeleton files (e.g., `resetb` must remain active-low).
 
-(For Task 7, you may add additional ports to the `lab1` module, and change any internal modules as you see fit.)
+(For Task 7, you may add additional ports to the `task7` module, and change any internal modules as you see fit.)
 
 If your code does not compile and simulate under these conditions (e.g., because of syntax errors, misconnected ports, or missing files), you will receive **0 marks**. If your code does not synthesize using Quartus, your marks will be reduced.
 
@@ -281,10 +281,10 @@ Deliverables in folder `task5`:
 - Modified `tb_statemachine.sv`
 - Modified `tb_scorehand.sv`
 - Modified `tb_datapath.sv`
-- Modified `tb_lab1.sv`
+- Modified `tb_task5.sv`
 - Any other modified/added source or test files for your design
 
-The toplevel module of your design must be named `lab1`.
+The toplevel module of your design must be named `task5`.
 
 ### Task 7 [1 mark]
 
@@ -292,5 +292,5 @@ Deliverables in folder `task7`:
 
 - All source files required to implement and test your design
 
-The toplevel module of your design must be named `lab1`, and the main testbench `tb_lab1`. 
+The toplevel module of your design must be named `task7`, and the main testbench `tb_task7`. 
 We will not autotest this task except to check that your design simulates and that your testbench tests the entire design; therefore, the mark comes 100% from your demo to the TA (unless the submitted simulation files / testbench don't work, in which case you get 0).
