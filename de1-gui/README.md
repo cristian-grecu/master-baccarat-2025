@@ -1,5 +1,15 @@
 # A Virtual DE1-SoC Board
 
+## Contents
+
+* [Introduction](#introduction)
+* [What's in the box?](#whats-in-the-box)
+* [Setting up the simulation](#setting-up-the-simulation)
+* [Simulating RTL](#simulating-rtl)
+* [Simulation versus The Real Thing™](#simulation-versus-the-real-thing)
+* [Simulating the post\-synthesis netlist](#simulating-the-post-synthesis-netlist)
+
+
 ## Introduction
 
 The labs in this course are designed to be completed using a DE1-SoC FPGA board. However, under the current public health conditions not everyone has physical access to one.
