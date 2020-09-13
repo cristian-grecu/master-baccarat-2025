@@ -12,9 +12,9 @@
 
 ## Introduction
 
-The labs in this course are designed to be completed using a DE1-SoC FPGA board. However, under the current public health conditions not everyone has physical access to one.
+The labs in this course are designed to be completed using a DE1-SoC FPGA board. However, you may not always have physical access to one.
 
-We have therefore developed a “virtual” DE1-SoC that emulates a portion of the functionality of the real board — for this lab, the buttons, LEDs, and seven-segment displays.
+We have developed a “virtual” DE1-SoC that emulates a portion of the functionality of the real board — for this lab, the buttons, LEDs, and seven-segment displays.
 
 
 ## What's in the box?

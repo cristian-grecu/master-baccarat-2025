@@ -191,15 +191,31 @@ The state machine is the “brain” of our circuit. It has an active-low reset 
 As should be evident from the earlier discussion, the card drawing pattern depends on the dealer score and the player score (these are used to determine whether a third card is necessary) as well as the player’s third card (this is used to determine whether the dealer should receive a third card, as described in the rules). Therefore, pcard3, pscore, and dscore are inputs to the state machine.
 
 
-### Task 5: Baccarat code and testbenches
+#### initial implementation
 
-In this task, you will create the testbenches and implement the design in Verilog. Your design must follow the hierarchical design approach shown below:
+To complete this task, create an initial implementation in Verilog that deals
+the first four cards, alternating between the two players. Each player should
+start with a score of 0, and the players score should update after receiving a
+card.  Stop after the four cards have been dealt, ensuring each player's total
+score is correct.
+
+Your design must follow the hierarchical design approach shown below:
 
 <p align="center"><img src="figures/hierarchy.svg" width="40%" height="40%" title="block diagram"></p>
 
-To get you started, stubs for each of the files are in the `task5` folder. Be sure to start with these, so that your interfaces for each module are correct (**do not modify the interfaces**). The `reg4` block is not shown in the diagram; you can either create a new module to describe a four-bit register, or write it directly into `datapath.sv` (your choice, either will work). To help you, we are giving you `dealcard.sv` and `task5.sv`.
+To get you started, stubs for each of the files are in the `task4` folder. Be
+sure to start with these, so that your interfaces for each module are correct
+(**do not modify the interfaces**). The `reg4` block is not shown in the
+diagram; you can either create a new module to describe a four-bit register, or
+write it directly into `datapath.sv` (your choice, either will work). To help
+you, we are giving you `dealcard.sv` and `task5.sv`.
 
-Start by writing unit tests for all your modules (you don't need to test `dealcard`, `card7seg`, or `reg4`). Each `tb_*.sv` file should test the corresponding module by providing inputs to the module's ports and examining the outputs, and test all of the code in the module. This also applies to the testbench for the toplevel module `task5`, which should only interface with the `task5` module and should not include the unit testbenches.
+
+### Task 5: Baccarat code and testbenches
+
+In this task, create testbenches and finish implementing the design.
+
+Before trying to finish the Verilog hardware, start by writing unit tests for all your modules (you don't need to test `dealcard`, `card7seg`, or `reg4`). Each `tb_*.sv` file should test the corresponding module by providing inputs to the module's ports and examining the outputs, and test all of the code in the module. This also applies to the testbench for the toplevel module `task5`, which should only interface with the `task5` module and should not include the unit testbenches.
 
 Be sure to exhaustively test **both** the SystemVerilog RTL code you write and the post-synthesis netlist Verilog file produced by Quartus (see the Tutorial).
 
@@ -289,8 +305,31 @@ Deliverables in folder `task1` (yes, that says task1):
 - Modified `tb_card7seg.sv`
 - Any other modified/added source or test files for your design
 
+For feedback only (no grades), an early deadline will be set for this task. If
+you submit code before this deadline, the TA will run the autograder and push a
+report back for you to examine.  This early deadline is for feedback only; it
+is not worth any grades. This task will be marked only after the final
+submission.
 
-#### Task 5 [8 marks]
+#### Task 4 [2 marks]
+
+Deliverables in folder `task4`:
+
+- Modified `card7seg.sv`
+- Modified `statemachine.sv`
+- Modified `scorehand.sv`
+- Modified `datapath.sv`
+- Any other modified/added source or test files for your design
+
+The toplevel module of your design must be named `task4`.
+
+For feedback only (no grades), an early deadline will be set for this task. If
+you submit code before this deadline, the TA will run the autograder and push a
+report back for you to examine.  This early deadline is for feedback only; it
+is not worth any grades. This task will be marked only after the final
+submission.
+
+#### Task 5 [6 marks]
 
 Deliverables in folder `task5`:
 
