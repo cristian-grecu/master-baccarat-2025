@@ -245,7 +245,7 @@ If you prefer, you may use the GitHub Desktop interface or another GUI instead o
 
 **WARNING: If you do not push the repository to GitHub, your lab will not be submitted and you will receive 0 marks for this lab.**
 
-You must push your changes **before the deadline**. GitHub will automatically copy the (remote) state of your repository as it appears at the deadline time, and that will be considered your submission.
+You must push your changes **before the deadline**. GitHub will automatically copy the state of your (remote) repository as it appears at the deadline time, and that will be considered your submission.
 
 We strongly encourage you to commit and perhaps push changes as you make progress. This is good development practice — this way, if you mess up and need a previously working version, you can revert your files to a version you committed earlier. To mark your lab, we will only examine the last version commit pushed before the deadline, so don't worry about how messy your in-progress commits might look.
 
@@ -253,7 +253,25 @@ You should commit **only** source files (in this lab, `.sv` files), and, optiona
 
 Any template files we give you (e.g., `card7seg.sv`) should be directly modified and committed using **the same filename**, rather than copied and modified.
 
-NOTE: The repository created for you when you follow the assignment link is private by default. **Do not** make it public — that would violate the academic honesty rules for this course.
+NOTE 1: The repository created for you when you follow the assignment link is private by default. **Do not** make it public — that would violate the academic honesty rules for this course.
+
+NOTE 2: We may be experimenting with a new GitHub Classroom feature that
+simplifies TAs/instructor feedback. When it creates the remote lab repository
+for you, it will automatically create a new development branch called
+"feedback". Do not use this branch or create any other branches. By default,
+all of your commits will be against the main branch called "master". The system
+also automatically creates a "pull request" from the master branch to the
+feedback branch.  This is a way of asking the feedback branch if it will accept
+all of the commits made to the master branch. **DO NOT MERGE THIS PULL
+REQUEST**. Instead, continue to make commits (and push those commits) as often
+as you like. The commits, when pushed, will be added to the pull request. In
+other words, this pull request becomes a handy way to view all of the changes
+you have made to the assignment. More importantly, any of the collaborators on
+your repository (you, a TA, or the instructor) can review changes made by any
+commit and add comments or feedback. This is a potentially very valuable
+feature for sharing your code with a TA/instructor and getting feedback, and
+responding to that feedback. You can also push new commits, and these are
+automatically folded in to the pull request to show improvements.
 
 
 ### Automatic testing
