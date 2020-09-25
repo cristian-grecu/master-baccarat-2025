@@ -284,7 +284,7 @@ The testsuite evaluates each task separately. For each design task folder (e.g.,
 
 1. You must not **rename any files** we have provided.
 2. You must not **add** any files that contain unused Verilog code; this may cause compilation to fail.
-3. Your testbench files must begin with `tb_` and **correspond to design file names** (e.g., `tb_scorecard.sv` for `scorecard.sv`).
+3. Your testbench files must begin with `tb_` and **correspond to design file names** (e.g., `tb_scorehand.sv` for `scorehand.sv`).
 4. You must not have **multiple copies of the same module** in separate committed source files in the same task folder. This will cause the compiler to fail because of duplicate module definitions.
 5. Your modules must not **rely on files from another folder** (e.g., you will need a separate copy of `card7seg.sv` in the `task5` folder, as well as a separate copies of all relevant files in `task7`). The autograder will only look in the relevant task folder.
 
