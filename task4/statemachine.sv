@@ -1,8 +1,8 @@
-module statemachine(input slow_clock, input resetb,
-                    input [3:0] dscore, input [3:0] pscore, input [3:0] pcard3,
-                    output load_pcard1, output load_pcard2,output load_pcard3,
-                    output load_dcard1, output load_dcard2, output load_dcard3,
-                    output player_win_light, output dealer_win_light);
+module statemachine(input logic slow_clock, input logic resetb,
+                    input logic [3:0] dscore, input logic [3:0] pscore, input logic [3:0] pcard3,
+                    output logic load_pcard1, output logic load_pcard2, output logic load_pcard3,
+                    output logic load_dcard1, output logic load_dcard2, output logic load_dcard3,
+                    output logic player_win_light, output logic dealer_win_light);
 
 // The code describing your state machine will go here.  Remember that
 // a state machine consists of next state logic, output logic, and the 

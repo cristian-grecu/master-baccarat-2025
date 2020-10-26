@@ -2,17 +2,17 @@
 // Assuming you don't modify the inputs and outputs of the various submodules,
 // you should not have to modify anything in this file.
 
-module task4(input CLOCK_50, input[3:0] KEY, output[9:0] LEDR,
-            output[6:0] HEX5, output[6:0] HEX4, output[6:0] HEX3,
-            output[6:0] HEX2, output[6:0] HEX1, output[6:0] HEX0);
+module task4(input logic CLOCK_50, input logic [3:0] KEY, output logic [9:0] LEDR,
+            output logic [6:0] HEX5, output logic [6:0] HEX4, output logic [6:0] HEX3,
+            output logic [6:0] HEX2, output logic [6:0] HEX1, output logic [6:0] HEX0);
 
 // some local signals 
 
-wire fast_clock, slow_clock, resetb;
-wire load_pcard1, load_pcard2, load_pcard3;
-wire load_dcard1, load_dcard2, load_dcard3;
-wire [3:0] pscore, dscore;
-wire [3:0] pcard3;
+logic fast_clock, slow_clock, resetb;
+logic load_pcard1, load_pcard2, load_pcard3;
+logic load_dcard1, load_dcard2, load_dcard3;
+logic [3:0] pscore, dscore;
+logic [3:0] pcard3;
 	
 assign resetb = KEY[3];
 assign slow_clock = KEY[0];
@@ -59,4 +59,3 @@ statemachine sm(.slow_clock(slow_clock),
                 .dealer_win_light(LEDR[9]));
 	
 endmodule
-
