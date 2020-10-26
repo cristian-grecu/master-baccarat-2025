@@ -276,7 +276,26 @@ automatically folded in to the pull request to show improvements.
 
 ### Automatic testing
 
-We will be marking your code via an automatic testing infrastructure. Your autograder marks will depend on the fraction of the testcases your code passed (i.e., which features work as specified), and how many cases your testbenches cover. Your autograder mark will also depend upon code coverage, which is the fraction of code tested by your testbench (you cannot measure this with the free version of ModelSim; we will test it with the full commercial version).
+We will be marking your code via an automatic testing infrastructure. Your autograder marks depend upon two things
+
+1. The percentage of **our** testcases that pass.
+2. The percentage of coverage using **your** testbenches.
+
+The autograder marks may also depend upon how many test cases are exercised by
+your testbench(es).
+
+For coverage, we measure coverage of both statements and branches. To achieve
+coverage of a statement, that statement must executed at least once during the
+testbench.  Branches refer to the number of different execution paths that can
+be taken, e.g. a case statemetn with 4 cases and a default would have 5
+branches (even if you omit a default branch, ModelSim still thinks it is there
+and counts it).  an if/else or case clause.  Although the tools report coverage
+of a testbench file (coverage of itself), we never look at that. The tools also
+report coverage of all instances (full hierarchy); your testbench should
+exercise as much of the complete hierarchy as possible.  The free version of
+ModelSim that you installed with Quartus cannot measure coverage. You may be
+able to access the commercial version ModelSim with a license to run coverage,
+but this only runs on UBC servers. Ask your instructor for details.
 
 It is essential that you understand how this works so that you submit the correct files — if our testsuite is unable to compile and test your code, you will not receive marks.
 
