@@ -208,7 +208,8 @@ sure to start with these, so that your interfaces for each module are correct
 (**do not modify the interfaces**). The `reg4` block is not shown in the
 diagram; you can either create a new module to describe a four-bit register, or
 write it directly into `datapath.sv` (your choice, either will work). To help
-you, we are giving you `dealcard.sv` and `task5.sv`.
+you, we are giving you `dealcard.sv` and `task5.sv`. Be sure to also write a
+testbench.
 
 
 ### Task 5: Baccarat code and testbenches
