@@ -339,9 +339,9 @@ Code quality will be checked as well for your Github classroom submission. Detai
 - compliance with the three synthesizable patterns indicated in lecture 
 - correct use of behavioural SV (i.e., if you design your hardware by hand and then instantiate gates, registers, muxes etc., you will lose marks)
 
-============================================================
+==================================================
 Old marking process below
-============================================================
+==================================================
 
 The evaluation of your submission consists of several parts:
 - **30%**: automatic testing of your RTL code (your `*.sv`)
