@@ -327,6 +327,22 @@ Optionally, you may include the post-synthesis netlist (`.vo` file) you generate
 
 ### Marks
 
+We will use a simplified marking method this term. I will leave the previous marking process below for you, so you know what you're missing. **Do** keep the file names and structure as per the instructions in the "Old marking process".
+Your grade for lab 1 will have two components:
+1. Demo and interview on Friday, during the lab session (you will have to book an appointment with a TA): 10 marks
+2. Code quality check: 5 marks
+
+The demo/interview will consist of your demonstrating the Baccarat game to the TA, and answering questions related to your code. You will have approximatively 10 minutes. 
+Code quality will be checked as well for your Github classroom submission. Details to pay attention to:
+- code readability
+- comments to indicate purpose at the top of each source file and explanations for all modules, processes (**always** blocks)
+- compliance with the three synthesizable patterns indicated in lecture 
+- correct use of behavioural SV (i.e., if you design your hardware by hand and then instantiate gates, registers, muxes etc., you will lose marks)
+
+============================================================
+Old marking process below
+============================================================
+
 The evaluation of your submission consists of several parts:
 - **30%**: automatic testing of your RTL code (your `*.sv`)
 - **20%**: automatic testing of your testbenches and how much of your code they cover (your `tb_*.sv` and `*.sv`)
