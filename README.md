@@ -339,6 +339,8 @@ Code quality will be checked as well for your Github classroom submission. Detai
 - compliance with the three synthesizable patterns indicated in lecture 
 - correct use of behavioural SV (i.e., if you design your hardware by hand and then instantiate gates, registers, muxes etc., you will lose marks)
 
+We will also provide a submission completeness check to make sure you did not miss any files from your Github classroom submission. If you submit your lab 1 before Wednesday, 11.59pm, you will get a notification on Thursday morning about any potentially missing files from your submitted lab assignment. The goal of this service is to encourage you to finish your lab early, and to avoid late submissions (and consequently loss of marks).
+
 ==Old marking process below==
 
 The evaluation of your submission consists of several parts:
