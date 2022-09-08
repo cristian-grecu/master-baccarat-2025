@@ -7,19 +7,19 @@ module de1_gui(output logic [9:0] SW, output logic [3:0] KEY, input logic [9:0] 
     generate
         genvar i;
         for (i = 0; i < 10; i = i + 1) begin: leds
-            always_comb mti_fli::mti_Command($sformatf("de1::led_set %d %d", i, LEDR[i]));
+            always_comb mti_fli::mti_Command($sformatf("::de1::led_set %d %d", i, LEDR[i]));
         end: leds
     endgenerate
     generate
         genvar seg;
         for (seg = 0; seg < 7; seg = seg + 1) begin: hexs
-            always_comb mti_fli::mti_Command($sformatf("de1::hex_set 0 %d %d", seg, ~HEX0[seg]));
-            always_comb mti_fli::mti_Command($sformatf("de1::hex_set 1 %d %d", seg, ~HEX1[seg]));
-            always_comb mti_fli::mti_Command($sformatf("de1::hex_set 2 %d %d", seg, ~HEX2[seg]));
-            always_comb mti_fli::mti_Command($sformatf("de1::hex_set 3 %d %d", seg, ~HEX3[seg]));
-            always_comb mti_fli::mti_Command($sformatf("de1::hex_set 4 %d %d", seg, ~HEX4[seg]));
-            always_comb mti_fli::mti_Command($sformatf("de1::hex_set 5 %d %d", seg, ~HEX5[seg]));
+            always_comb mti_fli::mti_Command($sformatf("::de1::hex_set 0 %d %d", seg, ~HEX0[seg]));
+            always_comb mti_fli::mti_Command($sformatf("::de1::hex_set 1 %d %d", seg, ~HEX1[seg]));
+            always_comb mti_fli::mti_Command($sformatf("::de1::hex_set 2 %d %d", seg, ~HEX2[seg]));
+            always_comb mti_fli::mti_Command($sformatf("::de1::hex_set 3 %d %d", seg, ~HEX3[seg]));
+            always_comb mti_fli::mti_Command($sformatf("::de1::hex_set 4 %d %d", seg, ~HEX4[seg]));
+            always_comb mti_fli::mti_Command($sformatf("::de1::hex_set 5 %d %d", seg, ~HEX5[seg]));
         end: hexs
     endgenerate
-    initial mti_fli::mti_Command("de1::init");
+    initial mti_fli::mti_Command("::de1::init");
 endmodule: de1_gui

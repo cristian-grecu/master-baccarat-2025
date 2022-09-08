@@ -2,7 +2,7 @@
 // Assuming you don't modify the inputs and outputs of the various submodules,
 // you should not have to modify anything in this file.
 
-module task5(input logic CLOCK_50, input logic [3:0] KEY, output logic [9:0] LEDR,
+module task4(input logic CLOCK_50, input logic [3:0] KEY, output logic [9:0] LEDR,
             output logic [6:0] HEX5, output logic [6:0] HEX4, output logic [6:0] HEX3,
             output logic [6:0] HEX2, output logic [6:0] HEX1, output logic [6:0] HEX0);
 
@@ -13,13 +13,13 @@ logic load_pcard1, load_pcard2, load_pcard3;
 logic load_dcard1, load_dcard2, load_dcard3;
 logic [3:0] pscore, dscore;
 logic [3:0] pcard3;
-
+	
 assign resetb = KEY[3];
 assign slow_clock = KEY[0];
 assign fast_clock = CLOCK_50;
 
 // instantiate the datapath
-
+	
 datapath dp(.slow_clock(slow_clock),
             .fast_clock(fast_clock),
             .resetb(resetb),
@@ -38,7 +38,7 @@ datapath dp(.slow_clock(slow_clock),
             .HEX2(HEX2),
             .HEX1(HEX1),
             .HEX0(HEX0));
-
+							
 assign LEDR[3:0] = pscore;
 assign LEDR[7:4] = dscore;
 
@@ -57,5 +57,5 @@ statemachine sm(.slow_clock(slow_clock),
                 .load_dcard3(load_dcard3),	
                 .player_win_light(LEDR[8]), 
                 .dealer_win_light(LEDR[9]));
-
+	
 endmodule

@@ -12,9 +12,9 @@
 
 ## Introduction
 
-The labs in this course are designed to be completed using a DE1-SoC FPGA board. However, under the current public health conditions not everyone has physical access to one.
+The labs in this course are designed to be completed using a DE1-SoC FPGA board. However, you may not always have physical access to one.
 
-We have therefore developed a “virtual” DE1-SoC that emulates a portion of the functionality of the real board — for this lab, the buttons, LEDs, and seven-segment displays.
+We have developed a “virtual” DE1-SoC that emulates a portion of the functionality of the real board — for this lab, the buttons, LEDs, and seven-segment displays.
 
 
 ## What's in the box?
@@ -39,39 +39,37 @@ If you accidentally submit these files, the autograder will mark your design as 
 
 Compile the entire design as usual, and load the compiled design by double-clicking on the `tb_de1_gui` in the _Library_ tab.
 
-Next, load the `de1_gui.tcl` file by issuing the command `source de1_gui.tcl` in the Transcript frame:
-
-<p align="center"><img src="figures/load-tcl.png" width="50%" height="50%" title="Loading the Tcl file"></p>
-
-You should see a new window that shows the switches, buttons, LEDs, and 7-segment displays of the DE1-SoC board:
+Next, load the `de1_gui.tcl` via _File&rarr;Load&rarr;Macro&nbsp;File..._ or by issuing the `source de1_gui.tcl` command in the Transcript frame. You should see a new window that shows the switches, buttons, LEDs, and 7-segment displays of the DE1-SoC board:
 
 <p align="center"><img src="figures/de1-gui-loaded.png" width="50%" height="50%" title="DE1-SoC GUI"></p>
 
 All switches and buttons are in the “off” position (i.e., the SW signals are all 0, and the KEY signals are all 1 as they are active-low). The LEDs are simulating the dimly-lit state they appear in when they are not driven on the real board.
 
-Move the switches and push the buttons to see what you can do. Note that unlike on the physical board, buttons stay pushed if you click on them to let you gradually advance the simulation without holding the mouse button; clicking the buttons again will release them.
+The fast-forward button <img src="figures/ff_button.png" width="auto" height="14pt"> does the same thing as <img src="figures/modelsim_run_button.png" width="auto" height="14pt"> in ModelSim — it advances the simulation by the amount of time shown next to <img src="figures/modelsim_run_button.png" width="auto" height="14pt"> — but saves you the need to constantly switch window focus between the DE1-SoC GUI and ModelSim.
+
+Move the switches and push the buttons to see what you can interact with. Note that unlike on the physical board, buttons stay pushed if you click on them to let you gradually advance the simulation without holding the mouse button; clicking the buttons again will release them. Because the hardware design is not being simulated yet, none of the LEDs or 7-segment displays will change state.
 
 
 ## Simulating RTL
 
-Now add the testbench signals to a waveform and simulate for 100ps.
+Now it's time to combine the GUI with simulated hardware. Add the testbench signals to a waveform and simulate for 100ps.
 
 <p align="center"><img src="figures/sim-before-reset.png" width="50%" height="50%" title="Starting the simulation"></p>
 
 Next, reset your design. The `button_pusher` design uses `KEY0` as reset, so click `KEY0` to push it in, advance the simulation for 100ps, click `KEY0` again to release it, and advance for another 100ps:
 
-<p align="center"><img src="figures/sim-after-reset.png" width="50%" height="50%" title="Starting the simulation"></p>
+<p align="center"><img src="figures/sim-after-reset.png" width="50%" height="50%" title="Simulator window after reset"></p>
 
 You should see that the virtual board display has changed:
 
-<p align="center"><img src="figures/gui-after-reset.png" width="50%" height="50%" title="Starting the simulation"></p>
+<p align="center"><img src="figures/de1-gui-after-reset.png" width="50%" height="50%" title="The DE1-SoC GUI after reset"></p>
 
-Try out the various switches and buttons and watch the design react. Remember that you have to **manually advance the simulation** in the ModelSim window, otherwise the simulated hardware will not react to your GUI inputs.
+Try out the various switches and buttons and watch the design react. Remember that you have to **manually advance the simulation** — otherwise the simulated hardware will not react to your GUI inputs.
 
 
 ## Simulation versus The Real Thing™
 
-If you have a physical DE1-SoC, synthesize `button_pusher` and download it to your FPGA. You will see that the initial state of your simulation differs from the real board, which will in all likelihood have the seven-segment displays lit:
+If you have a physical DE1-SoC, synthesize `button_pusher` (don't forget the pin assignment file!) and download it to your FPGA. You will see that the initial state of the simulation differs from the real board, which will in all likelihood have the seven-segment displays lit:
 
 <p align="center"><img src="figures/real-board-before-reset.jpg" width="33%" height="33%" title="Real DE1-SoC"></p>
 

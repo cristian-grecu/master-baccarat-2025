@@ -129,11 +129,11 @@ First, consider the behaviour of the Baccarat circuit from the user’s point of
 
 <p align="center"><img src="figures/baccarat-circuit.png" width="50%" height="50%" title="the Baccarat circuit"></p>
 
-The game starts by asserting the reset signal (KEY3) which is **active-low**. The user can then step through each step of the game (deal one card to the player, one to the dealer, etc) by pressing KEY0 (this will be referred as **slow_clock** in this document). The exact sequence of states will be described below. As the cards are dealt, the player’s hand is shown on HEX0 to HEX2 (one hex digit per card — remember each hand can contain up to three cards) and the dealer’s hand is shown on HEX3 to HEX5. The current score of the player’s hand will be shown on lights LEGR3 to LEGR0 (recall that the score of a hand is always in the range [0,9] and can be represented using four bits), and the current score of the dealer’s hand will be shown on LEGR7 to LEGR4. We use lights to display the binary version of the score, since the DE1-SoC only has six hex digits.
+The game starts by asserting the reset signal (KEY3) which is **active-low** and **synchronous**. The user can then step through each step of the game (deal one card to the player, one to the dealer, etc) by pressing KEY0 (this will be referred as **slow_clock** in this document). The exact sequence of states will be described below. As the cards are dealt, the player’s hand is shown on HEX0 to HEX2 (one hex digit per card — remember each hand can contain up to three cards) and the dealer’s hand is shown on HEX3 to HEX5. The current score of the player’s hand will be shown on lights LEGR3 to LEGR0 (recall that the score of a hand is always in the range [0,9] and can be represented using four bits), and the current score of the dealer’s hand will be shown on LEGR7 to LEGR4. We use lights to display the binary version of the score, since the DE1-SoC only has six hex digits.
 
 There is also a 50MHz clock input; this is used solely for clocking the dealcard block which deals a random card. This will be described further in a subsequent task.
 
-At the end of the game, red lights 8 and 9 will indicate the winner: if the player wins, light LEDR(8) goes high. (In your implementation, you may delay this until KEY0 has been pressed one more time after the winning card has been dealt). If the dealer wins, light LEDR(9) goes high. If it is a tie, both LEDR(8) and LEDR(9) go high. The system then does nothing until the user presses reset, sending it back to the first state to deal another hand.
+At the end of the game, red lights 8 and 9 will indicate the winner: if the player wins, light LEDR(8) goes high. (In your implementation, you may delay this until KEY0 has been pressed one more time after the winning card has been dealt). If the dealer wins, light LEDR(9) goes high. If it is a tie, both LEDR(8) and LEDR(9) go high. The system then does nothing until the user presses reset and clock, sending it back to the first state to deal another hand.
 
 Notice that, other than cycling through the states using KEY0 (the slow clock), the user does not need to do anything. This is consistent with the description of the game above.
 
@@ -150,7 +150,7 @@ First consider the datapath, which consists of everything except the `statemachi
 
 To deal random cards, we need a random number generator. Random numbers are difficult to generate in hardware (can you suggest why?). We will use a few simple tricks. First, assume we are dealing from an infinite deck, so it is equally likely to generate any card, no matter which cards have been given out (casinos try to approximate this approach this by using multiple decks). Second, assume that when the player presses the “next step” key, an unpredictable amount of time has passed, representing a random delay. During this random delay interval, the subcircuit described in `dealcard.sv` will be continuously counting from the first card (Ace=1) to the last card (King=13), and then wrapping around to Ace=1 at a very high rate (e.g., 50MHz). To obtain a random card, we simply sample the current value of this counter when the user presses the “next step” key.
 
-To save you time, we have written `dealcard.sv` for you. This block has two inputs (the fast clock and a reset) and one output (the card being dealt, represented by a number from 1 to 13 as described above). This circuit is essentially a counter. Be sure you understand it before moving on.
+To save you time, we have written `dealcard.sv` for you. This block has two inputs (the fast clock and a synchronous reset) and one output (the card being dealt, represented by a number from 1 to 13 as described above). This circuit is essentially a counter. Be sure you understand it before moving on.
 
 The design of `dealcard` raises an interesting point. Because you have two clocks (one from KEY0 driving the modules that use `dealcard` and the other from the 50MHz clock driving `dealcard` itself), you may rarely observe that the card dealt is not in the range 1..13. This is because the two clocks are _asynchronous_ — i.e., you might push KEY0 at just the right moment to sample the `dealcard` output when it is unstable. Can you reproduce this behaviour when testing in the FPGA?
 
@@ -160,7 +160,7 @@ You do not need to worry the asynchronous clocks for this lab, other than notici
 
 Each card in each hand is stored in a `reg4` block, which is a 4-bit wide register (set of four D-flip-flops). The upper three reg4 blocks store the player’s hand, and the lower three `reg4` blocks store the dealer’s hand (recall each hand can have up to three cards). Each card is stored as a number from 1 to 13 (Ace=1, number cards are represented as themselves, Jack=11, Queen=12, King=13). We will not store the suit information for each card (the suit of a card does not matter in Baccarat). If a position in the hand does not have a card, we store a 0 to represent “no card”. As an example, if the player’s hand consists of a 5 and a Jack (and no third card), `PCard1` would contain the number 5, `PCard2` would contain the number 11, and `PCard3` would contain the number 0 (no card). Note that since there are 14 different possible values (including 0), four bits in each register is sufficient.
 
-Each register is clocked using slow_clock (which is connected to KEY0 and toggled by the user). On each rising clock edge of slow_clock, if the enable signal (for `PCard1` the enable signal is called `load_pcard1`) is high, the value from dealcard is loaded into the register. The register also contains an active-low reset signal (which is connected to KEY3); when this is low, the value in the register goes to 0.
+Each register is clocked using slow_clock (which is connected to KEY0 and toggled by the user). On each rising clock edge of slow_clock, if the enable signal (for `PCard1` the enable signal is called `load_pcard1`) is high, the value from dealcard is loaded into the register. The register also contains an active-low synchronous reset signal (which is connected to KEY3); if this is low, the value in the register goes to 0 on the next rising clock edge.
 
 #### card7seg
 
@@ -186,20 +186,37 @@ You should be able to see that a hand can have a score in the range [0,9], thus 
 
 #### statemachine
 
-The state machine is the “brain” of our circuit. It has an active-low reset (called resetb) and is clocked by slow_clock (which is connected to KEY0). On each rising edge of slow_clock, the state machine advances one step through the algorithm, and asserts the appropriate control signals at each step. In this circuit, the control signals that the state machine controls are load_pcard1, load_pcard2, … load_dcard3. When it is time to deal the first card to the player, the state machine asserts load_pcard1, which as was described above, causes the first Reg4 block to load in a card (from the output of the dealcard block). During the cycle in which load_pcard1 is 1, all other load_pcard and load_dcard signals are 0, so that no other positions in either hand are updated. As the algorithm progresses, the state machine will generate the other control signals to be asserted at the appropriate times.
+The state machine is the “brain” of our circuit. It has an active-low synchronous reset (called resetb) and is clocked by slow_clock (which is connected to KEY0). On each rising edge of slow_clock, the state machine advances one step through the algorithm, and asserts the appropriate control signals at each step. In this circuit, the control signals that the state machine controls are load_pcard1, load_pcard2, … load_dcard3. When it is time to deal the first card to the player, the state machine asserts load_pcard1, which as was described above, causes the first Reg4 block to load in a card (from the output of the dealcard block). During the cycle in which load_pcard1 is 1, all other load_pcard and load_dcard signals are 0, so that no other positions in either hand are updated. As the algorithm progresses, the state machine will generate the other control signals to be asserted at the appropriate times.
 
 As should be evident from the earlier discussion, the card drawing pattern depends on the dealer score and the player score (these are used to determine whether a third card is necessary) as well as the player’s third card (this is used to determine whether the dealer should receive a third card, as described in the rules). Therefore, pcard3, pscore, and dscore are inputs to the state machine.
 
 
-### Task 5: Baccarat code and testbenches
+#### initial implementation
 
-In this task, you will create the testbenches and implement the design in Verilog. Your design must follow the hierarchical design approach shown below:
+To complete this task, create an initial implementation in Verilog that deals
+the first four cards, alternating between the two players. Each player should
+start with a score of 0, and the players score should update after receiving a
+card.  Stop after the four cards have been dealt, ensuring each player's total
+score is correct.
+
+Your design must follow the hierarchical design approach shown below:
 
 <p align="center"><img src="figures/hierarchy.svg" width="40%" height="40%" title="block diagram"></p>
 
-To get you started, stubs for each of the files are in the `task5` folder. Be sure to start with these, so that your interfaces for each module are correct (**do not modify the interfaces**). The `reg4` block is not shown in the diagram; you can either create a new module to describe a four-bit register, or write it directly into `datapath.sv` (your choice, either will work). To help you, we are giving you `dealcard.sv` and `task5.sv`.
+To get you started, stubs for each of the files are in the `task4` folder. Be
+sure to start with these, so that your interfaces for each module are correct
+(**do not modify the interfaces**). The `reg4` block is not shown in the
+diagram; you can either create a new module to describe a four-bit register, or
+write it directly into `datapath.sv` (your choice, either will work). To help
+you, we are giving you `dealcard.sv` and `task5.sv`. Be sure to also write a
+testbench.
 
-Start by writing unit tests for all your modules (you don't need to test `dealcard`, `card7seg`, or `reg4`). Each `tb_*.sv` file should test the corresponding module by providing inputs to the module's ports and examining the outputs, and test all of the code in the module. This also applies to the testbench for the toplevel module `task5`, which should only interface with the `task5` module and should not include the unit testbenches.
+
+### Task 5: Baccarat code and testbenches
+
+In this task, create testbenches and finish implementing the design.
+
+Before trying to finish the Verilog hardware, start by writing unit tests for all your modules (you don't need to test `dealcard`, `card7seg`, or `reg4`). Each `tb_*.sv` file should test the corresponding module by providing inputs to the module's ports and examining the outputs, and test all of the code in the module. This also applies to the testbench for the toplevel module `task5`, which should only interface with the `task5` module and should not include the unit testbenches.
 
 Be sure to exhaustively test **both** the SystemVerilog RTL code you write and the post-synthesis netlist Verilog file produced by Quartus (see the Tutorial).
 
@@ -229,7 +246,7 @@ If you prefer, you may use the GitHub Desktop interface or another GUI instead o
 
 **WARNING: If you do not push the repository to GitHub, your lab will not be submitted and you will receive 0 marks for this lab.**
 
-You must push your changes **before the deadline**. GitHub will automatically copy the (remote) state of your repository as it appears at the deadline time, and that will be considered your submission.
+You must push your changes **before the deadline**. GitHub will automatically copy the state of your (remote) repository as it appears at the deadline time, and that will be considered your submission.
 
 We strongly encourage you to commit and perhaps push changes as you make progress. This is good development practice — this way, if you mess up and need a previously working version, you can revert your files to a version you committed earlier. To mark your lab, we will only examine the last version commit pushed before the deadline, so don't worry about how messy your in-progress commits might look.
 
@@ -237,12 +254,49 @@ You should commit **only** source files (in this lab, `.sv` files), and, optiona
 
 Any template files we give you (e.g., `card7seg.sv`) should be directly modified and committed using **the same filename**, rather than copied and modified.
 
-NOTE: The repository created for you when you follow the assignment link is private by default. **Do not** make it public — that would violate the academic honesty rules for this course.
+NOTE 1: The repository created for you when you follow the assignment link is private by default. **Do not** make it public — that would violate the academic honesty rules for this course.
+
+NOTE 2: We may be experimenting with a new GitHub Classroom feature that
+simplifies TAs/instructor feedback. When it creates the remote lab repository
+for you, it will automatically create a new development branch called
+"feedback". Do not use this branch or create any other branches. By default,
+all of your commits will be against the main branch called "master". The system
+also automatically creates a "pull request" from the master branch to the
+feedback branch.  This is a way of asking the feedback branch if it will accept
+all of the commits made to the master branch. **DO NOT MERGE THIS PULL
+REQUEST**. Instead, continue to make commits (and push those commits) as often
+as you like. The commits, when pushed, will be added to the pull request. In
+other words, this pull request becomes a handy way to view all of the changes
+you have made to the assignment. More importantly, any of the collaborators on
+your repository (you, a TA, or the instructor) can review changes made by any
+commit and add comments or feedback. This is a potentially very valuable
+feature for sharing your code with a TA/instructor and getting feedback, and
+responding to that feedback. You can also push new commits, and these are
+automatically folded in to the pull request to show improvements.
 
 
 ### Automatic testing
 
-We will be marking your code via an automatic testing infrastructure. Your autograder marks will depend on the fraction of the testcases your code passed (i.e., which features work as specified), and how many cases your testbenches cover. Your autograder mark will also depend upon code coverage, which is the fraction of code tested by your testbench (you cannot measure this with the free version of ModelSim; we will test it with the full commercial version).
+We will be marking your code via an automatic testing infrastructure. Your autograder marks depend upon two things
+
+1. The percentage of **our** testcases that pass.
+2. The percentage of coverage using **your** testbenches.
+
+The autograder marks may also depend upon how many test cases are exercised by
+your testbench(es).
+
+For coverage, we measure coverage of both statements and branches. To achieve
+coverage of a statement, that statement must executed at least once during the
+testbench.  Branches refer to the number of different execution paths that can
+be taken, e.g. a case statemetn with 4 cases and a default would have 5
+branches (even if you omit a default branch, ModelSim still thinks it is there
+and counts it).  an if/else or case clause.  Although the tools report coverage
+of a testbench file (coverage of itself), we never look at that. The tools also
+report coverage of all instances (full hierarchy); your testbench should
+exercise as much of the complete hierarchy as possible.  The free version of
+ModelSim that you installed with Quartus cannot measure coverage. You may be
+able to access the commercial version ModelSim with a license to run coverage,
+but this only runs on UBC servers. Ask your instructor for details.
 
 It is essential that you understand how this works so that you submit the correct files — if our testsuite is unable to compile and test your code, you will not receive marks.
 
@@ -250,14 +304,14 @@ The testsuite evaluates each task separately. For each design task folder (e.g.,
 
 1. You must not **rename any files** we have provided.
 2. You must not **add** any files that contain unused Verilog code; this may cause compilation to fail.
-3. Your testbench files must begin with `tb_` and **correspond to design file names** (e.g., `tb_scorecard.sv` for `scorecard.sv`).
+3. Your testbench files must begin with `tb_` and **correspond to design file names** (e.g., `tb_scorehand.sv` for `scorehand.sv`).
 4. You must not have **multiple copies of the same module** in separate committed source files in the same task folder. This will cause the compiler to fail because of duplicate module definitions.
 5. Your modules must not **rely on files from another folder** (e.g., you will need a separate copy of `card7seg.sv` in the `task5` folder, as well as a separate copies of all relevant files in `task7`). The autograder will only look in the relevant task folder.
 
 The autograder will instantiate and test each module exactly the way it is defined in the provided skeleton files. This means that
 1. You must not **alter the module declarations, port lists, etc.**, in the provided skeleton files.
 2. You must not **rename any modules, ports, or signals** in the provided skeleton files.
-3. You must not **alter the width or polarity of any signal** in the skeleton files (e.g., `resetb` must remain active-low).
+3. You must not **alter the width or polarity of any signal** in the skeleton files (e.g., `resetb` is synchronous and must remain active-low).
 
 Tests will be done first on the RTL code you submit (the `.sv` files). The autograder will then synthesize your design using Quartus, and run its tests on the post-synthesis Verilog files (the `.vo` files). Note that, while you [may optionally submit](#post-synthesis-simulation) the `.vo` files you synthesized, we will use our own synthesis results for marking.
 
@@ -273,12 +327,28 @@ Optionally, you may include the post-synthesis netlist (`.vo` file) you generate
 
 ### Marks
 
+We will use a simplified marking method this term. I will leave the previous marking process below for you, so you know what you're missing. **Do** keep the file names and structure as per the instructions in the "Old marking process".
+Your grade for lab 1 will have two components:
+1. Demo and interview on Friday, during the lab session (you will have to book an appointment with a TA): 10 marks
+2. Code quality check: 5 marks
+
+The demo/interview will consist of your demonstrating the Baccarat game to the TA, and answering questions related to your code. You will have approximatively 10 minutes. 
+Code quality will be checked as well for your Github classroom submission. Details to pay attention to:
+- code readability
+- comments to indicate purpose at the top of each source file and explanations for all modules, processes (**always** blocks)
+- compliance with the three synthesizable patterns indicated in lecture 
+- correct use of behavioural SV (i.e., if you design your hardware by hand and then instantiate gates, registers, muxes etc., you will lose marks)
+
+We will also provide a submission completeness check to make sure you did not miss any files from your Github classroom submission. If you submit your lab 1 before Wednesday, 11.59pm, you will get a notification on Thursday morning about any potentially missing files from your submitted lab assignment. The goal of this service is to encourage you to finish your lab early, and to avoid late submissions (and consequently loss of marks).
+
+==Old marking process below==
+
 The evaluation of your submission consists of several parts:
 - **30%**: automatic testing of your RTL code (your `*.sv`)
 - **20%**: automatic testing of your testbenches and how much of your code they cover (your `tb_*.sv` and `*.sv`)
 - **50%**: automatic testing of the synthesized netlist (synthesized from your `*.sv`)
 
-If you did not submit your code to GitHub or did tell us your GitHub username **before the lab due date** (see Canvas), you will receive **0 marks**.
+If you did not submit your code to GitHub or did not tell us your GitHub username **before the lab due date** (see Canvas), you will receive **0 marks**.
 
 
 #### Task 2 [2 marks]
@@ -289,8 +359,31 @@ Deliverables in folder `task1` (yes, that says task1):
 - Modified `tb_card7seg.sv`
 - Any other modified/added source or test files for your design
 
+For feedback only (no grades), an early deadline will be set for this task. If
+you submit code before this deadline, the TA will run the autograder and push a
+report back for you to examine.  This early deadline is for feedback only; it
+is not worth any grades. This task will be marked only after the final
+submission.
 
-#### Task 5 [8 marks]
+#### Task 4 [2 marks]
+
+Deliverables in folder `task4`:
+
+- Modified `card7seg.sv`
+- Modified `statemachine.sv`
+- Modified `scorehand.sv`
+- Modified `datapath.sv`
+- Any other modified/added source or test files for your design
+
+The toplevel module of your design must be named `task4`.
+
+For feedback only (no grades), an early deadline will be set for this task. If
+you submit code before this deadline, the TA will run the autograder and push a
+report back for you to examine.  This early deadline is for feedback only; it
+is not worth any grades. This task will be marked only after the final
+submission.
+
+#### Task 5 [6 marks]
 
 Deliverables in folder `task5`:
 
