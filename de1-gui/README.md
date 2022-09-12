@@ -28,6 +28,9 @@ The directory also contains a simple synthesizable design you can use to test th
 
 **Important:** If you are debugging your circuit using the GUI, **do not** copy these files to your task folder, but reference them directly from the `de1-gui` folder (“Reference from current location” when you add the file). The `de1_gui.sv` file does not work without the `de1_gui.tcl` interface and it is not synthesizable. If you submit the file with your tasks, the autograder will treat it as part of your submission, and mark your submission as failing to simulate or synthesize.
 
+**Again, to use the Virtual DE1-SoC, do not copy the files into your task folders! Instead, reference them using relative filenames, e.g.
+`../de1-gui/de1_cui.sv`**
+
 
 ## Setting up the simulation
 

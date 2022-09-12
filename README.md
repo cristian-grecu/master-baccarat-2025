@@ -4,7 +4,7 @@
 ## Contents
 
 * [Introduction](#introduction)
-  * [No FPGA board?](#no-fpga-board)
+  * [FPGA board](#fpga-board)
 * [Baccarat](#baccarat)
 * [Phase 1: Getting your environment ready](#phase-1-getting-your-environment-ready)
 * [Phase 2: Warmup](#phase-2-warmup)
@@ -34,15 +34,28 @@ We will be using two pieces of software for most of this course: Quartus Prime, 
 We strongly recommend that you start working on labs **early** — it always takes longer than you think, especially if you are not very good at debugging. This lab is relatively easy; future labs will be harder and will take longer.
 
 
-### No FPGA board?
+### FPGA board
 
-The labs in this course are designed to be completed using a DE1-SoC FPGA board. However, under the current public health conditions not everyone has physical access to one.
+The labs in this course are designed to be completed using a DE1-SoC FPGA
+board.  For soem labs, it may be possible to use similar FPGA boards, but they
+may lack essential features.  the DE0-CV board might work in a pinch, but it
+does not have the hardened ARM processor system (aka `hps`) which is required
+in CPEN391 and might be required in a later lab in this course.
 
-We have therefore ensured that, for this offering of the course, it is possible to complete the lab and receive marks for it without access to physical board. We still recommend that you use your DE1-SoC if you have one — you will have a much more rewarding experience. Besides, even though we will not be using a physical FPGA board for marking, if your design does not work on a the FPGA, it's a good bet that something is wrong with your code and it will likely not pass our marking tests.
+If you have misplaced your board, it is possible to complete the lab and
+receive marks for it without access to physical board. We still recommend that
+you use your DE1-SoC if you have one — you will have a much more rewarding
+experience.
 
-Read the [Virtual DE1-SoC](de1-gui/README.md) document to learn how to simulate and debug your code without a physical FPGA.
+Read the [Virtual DE1-SoC](de1-gui/README.md) document to learn how to simulate
+and debug your code without a physical FPGA.  If you are demonstrating to a TA
+for marks, you must use the post-synthesis netlist.  Note that simulating with
+the Virtual DE1-SoC is extremely slow.
+**To use the Virtual DE1-SoC, do not copy the files into your task folders! Instead, reference them using relative filenames, e.g.
+`../de1-gui/de1_cui.sv`**
 
-Be sure to read the [Deliverables and Evaluation](#deliverables-and-evaluation) section to understand how we will mark your submission.
+Be sure to read the [Deliverables and Evaluation](#deliverables-and-evaluation)
+section to understand how we will mark your submission.
 
 
 ## Baccarat
@@ -397,31 +410,8 @@ Be sure to exhaustively test **both** the SystemVerilog RTL code you write and t
 Optionally, you may include the post-synthesis netlist (`.vo` file) you generated from Quartus. We will not use it for marking, but it can provide evidence in the unlikely event that you need to appeal your marks.
 
 
-### Automatic testing
 
-In the past, the course placed a heavy emphasis on automated testing of labs.
-This section is left here for legacy purposes.
 
-It is essential that you understand how this works so that you submit the
-correct files — if our testsuite is unable to compile and test your code, you
-will not receive marks.
-
-The testsuite evaluates each task separately. For each design task folder (e.g., `task5`), it collects all Verilog files (`*.sv`) that do not begin with `tb_` and compiles them **all together**, both using Modelsim and using Quartus. Separately, each required `tb_*.sv` file is compiled with the relevant `*.sv` design files. This means that
-
-1. You must not **rename any files** we have provided.
-2. You must not **add** any files that contain unused Verilog code; this may cause compilation to fail.
-3. Your testbench files must begin with `tb_` and **correspond to design file names** (e.g., `tb_scorehand.sv` for `scorehand.sv`).
-4. You must not have **multiple copies of the same module** in separate committed source files in the same task folder. This will cause the compiler to fail because of duplicate module definitions.
-5. Your modules must not **rely on files from another folder** (e.g., you will need a separate copy of `card7seg.sv` in the `task5` folder, as well as a separate copies of all relevant files in `task7`). The autograder will only look in the relevant task folder.
-
-The autograder will instantiate and test each module exactly the way it is defined in the provided skeleton files. This means that
-1. You must not **alter the module declarations, port lists, etc.**, in the provided skeleton files.
-2. You must not **rename any modules, ports, or signals** in the provided skeleton files.
-3. You must not **alter the width or polarity of any signal** in the skeleton files (e.g., `resetb` is synchronous and must remain active-low).
-
-Tests will be done first on the RTL code you submit (the `.sv` files). The autograder will then synthesize your design using Quartus, and run its tests on the post-synthesis Verilog files (the `.vo` files). Note that, while you [may optionally submit](#post-synthesis-simulation) the `.vo` files you synthesized, we will use our own synthesis results for marking.
-
-If your code does not compile and simulate in ModelSim or does not synthesize in Quartus under these conditions (e.g., because of syntax errors, misconnected ports, or missing files, non-synthesizable RTL), you will receive **0 marks** for the relevant portion of the grade.
 
 
 ## Marks (2022W1)
@@ -460,6 +450,8 @@ you to finish your lab early, and to avoid late submissions (and consequently
 loss of marks). This service will not be performed in future labs.
 -->
 
+**Do not submit any Virtual DE1-SoC files with the tasks below.**
+
 #### Task 2 [2 marks]
 
 Deliverables in folder `task1` (yes, that says task1):
@@ -496,11 +488,49 @@ Deliverables in folder `task5`:
 
 The toplevel module of your design must be named `task5`.
 
-
-
 ### Old Marking Process (not used 2022W1)
 
-The evaluation of your submission consists of several parts:
+In the past, the course placed a heavy emphasis on automated testing of labs.
+This section is left here for legacy purposes.  **In particular, you should
+follow the rules below about not modifying filenames or module/port/signal
+declarations that have been provided to you.**
+
+
+The automated evaluation of your submission consists of several parts:
 - **30%**: automatic testing of your RTL code (your `*.sv`)
 - **20%**: automatic testing of your testbenches and how much of your code they cover (your `tb_*.sv` and `*.sv`)
 - **50%**: automatic testing of the synthesized netlist (synthesized from your `*.sv`)
+
+
+It is essential that you understand how this works so that you submit the
+correct files — if our testsuite is unable to compile and test your code, you
+will not receive marks.
+
+The testsuite evaluates each task separately. For each design task folder
+(e.g., `task5`), it collects all Verilog files (`*.sv`) that do not begin with
+`tb_` and compiles them **all together**, both using Modelsim and using
+Quartus. Separately, each required `tb_*.sv` file is compiled with the relevant
+`*.sv` design files. This means that
+
+1. You must not **rename any files** we have provided.
+2. You must not **add** any files that contain unused Verilog code; this may cause compilation to fail.
+3. Your testbench files must begin with `tb_` and **correspond to design file names** (e.g., `tb_scorehand.sv` for `scorehand.sv`).
+4. You must not have **multiple copies of the same module** in separate committed source files in the same task folder. This will cause the compiler to fail because of duplicate module definitions.
+5. Your modules must not **rely on files from another folder** (e.g., you will need a separate copy of `card7seg.sv` in the `task5` folder, as well as a separate copies of all relevant files in `task7`). The autograder will only look in the relevant task folder.
+
+The autograder will instantiate and test each module exactly the way it is defined in the provided skeleton files. This means that
+1. You must not **alter the module declarations, port lists, etc.**, in the provided skeleton files.
+2. You must not **rename any modules, ports, or signals** in the provided skeleton files.
+3. You must not **alter the width or polarity of any signal** in the skeleton files (e.g., `resetb` is synchronous and must remain active-low).
+
+Tests will be done first on the RTL code you submit (the `.sv` files). The
+autograder will then synthesize your design using Quartus, and run its tests on
+the post-synthesis Verilog files (the `.vo` files). Note that, while you
+[may optionally submit](#post-synthesis-simulation) the `.vo` files you synthesized,
+we will use our own synthesis results for marking.
+
+If your code does not compile and simulate in ModelSim or does not synthesize
+in Quartus under these conditions (e.g., because of syntax errors, misconnected
+ports, or missing files, non-synthesizable RTL), you will receive **0 marks**
+for the relevant portion of the grade.
+
