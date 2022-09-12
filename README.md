@@ -432,20 +432,25 @@ file names and structure as per the instructions in the "Old Marking Process"
 shown below.
 
 Your grade for lab 1 will have two components:
-1. Demo and interview during your lab session: 10 marks
-2. Code quality check: 5 marks
+1. Demo and interview during your lab session: 10 marks (breakdown by task below)
+2. Code quality check: grade multiplier 0.0 to 1.5
 
 The demo/interview will consist of your demonstrating the Baccarat game to the
 TA, and answering questions related to your code.  You will have
-approximatively 10 minutes.  You will have to show working simulation as well
-as coverage reports for as many tasks as you have completed.
+approximatively 10 minutes.  You will have to show working simulation, a
+working synthesized design on the board, and coverage reports for the tasks
+that you have completed.
 
-Code quality will be checked as well for your Github classroom submission. Details to pay attention to:
+Code quality will be checked from your Github submission.  It will be assigned
+as a multiplier to the demo/interview grade, such that the maximum overall
+grade is 15 out of 15 marks.  Details to pay attention to are:
+
 - code readability
 - comments to indicate purpose at the top of each source file and explanations for all modules, processes (**always** blocks)
 - compliance with the three synthesizable patterns indicated in lecture 
-- correct use of behavioural SV (i.e., if you instantiate low-level gates, registers, muxes etc., you will lose marks)
+- correct use of behavioural Verilog (i.e., if you instantiate low-level gates, registers, muxes etc., you will lose marks)
 
+<!--
 We will also provide a submission completeness check to make sure you did not
 miss any files from your Github classroom submission. If you submit your lab 1
 by 11:59pm on the Friday night before the first lab marking session (Monday),
@@ -453,6 +458,44 @@ you will get a notification on the weekend about any potentially missing files
 from your submitted lab assignment. The goal of this service is to encourage
 you to finish your lab early, and to avoid late submissions (and consequently
 loss of marks). This service will not be performed in future labs.
+-->
+
+#### Task 2 [2 marks]
+
+Deliverables in folder `task1` (yes, that says task1):
+
+- Modified `card7seg.sv`
+- Modified `tb_card7seg.sv`
+- Any other modified/added source or test files for your design
+
+#### Task 4 [2 marks]
+
+Deliverables in folder `task4`:
+
+- Modified `card7seg.sv`
+- Modified `statemachine.sv`
+- Modified `scorehand.sv`
+- Modified `datapath.sv`
+- Any other modified/added source or test files for your design
+
+The toplevel module of your design must be named `task4`.
+
+#### Task 5 [6 marks]
+
+Deliverables in folder `task5`:
+
+- Modified `card7seg.sv`
+- Modified `statemachine.sv`
+- Modified `scorehand.sv`
+- Modified `datapath.sv`
+- Modified `tb_statemachine.sv`
+- Modified `tb_scorehand.sv`
+- Modified `tb_datapath.sv`
+- Modified `tb_task5.sv`
+- Any other modified/added source or test files for your design
+
+The toplevel module of your design must be named `task5`.
+
 
 
 ### Old Marking Process (not used 2022W1)
