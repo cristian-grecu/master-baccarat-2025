@@ -52,7 +52,7 @@ and debug your code without a physical FPGA.  If you are demonstrating to a TA
 for marks, you must use the post-synthesis netlist.  Note that simulating with
 the Virtual DE1-SoC is extremely slow.
 **To use the Virtual DE1-SoC, do not copy the files into your task folders! Instead, reference them using relative filenames, e.g.
-`../de1-gui/de1_cui.sv`**
+`../de1-gui/de1_gui.sv`**
 
 Be sure to read the [Deliverables and Evaluation](#deliverables-and-evaluation)
 section to understand how we will mark your submission.
