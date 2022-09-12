@@ -37,7 +37,7 @@ We strongly recommend that you start working on labs **early** — it always tak
 ### FPGA board
 
 The labs in this course are designed to be completed using a DE1-SoC FPGA
-board.  For soem labs, it may be possible to use similar FPGA boards, but they
+board.  For some labs, it may be possible to use similar FPGA boards, but they
 may lack essential features.  the DE0-CV board might work in a pinch, but it
 does not have the hardened ARM processor system (aka `hps`) which is required
 in CPEN391 and might be required in a later lab in this course.
@@ -414,7 +414,7 @@ Optionally, you may include the post-synthesis netlist (`.vo` file) you generate
 
 
 
-## Marks (2022W1)
+## Marks
 
 We will use a simplified marking method this term. I will leave the previous
 marking process below for you, so you know what you're missing. **Do** keep the
