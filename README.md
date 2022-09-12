@@ -16,7 +16,7 @@
   * [Task 5: Baccarat code and testbenches](#task-5-baccarat-code-and-testbenches)
   * [Task 6: Verify your design on a DE1\-SoC board](#task-6-verify-your-design-on-a-de1-soc-board)
 * [Simulation and Code Coverage with ModelSim](#simulation-and-code-coverage-with-modelsim)
-  * [SSH Access](#using-ssh)
+  * [SSH Access](#ssh-access)
 * [Deliverables and Evaluation](#deliverables-and-evaluation)
   * [Using GitHub](#using-github)
   * [Code coverage](#code-coverage)
@@ -424,7 +424,7 @@ Tests will be done first on the RTL code you submit (the `.sv` files). The autog
 If your code does not compile and simulate in ModelSim or does not synthesize in Quartus under these conditions (e.g., because of syntax errors, misconnected ports, or missing files, non-synthesizable RTL), you will receive **0 marks** for the relevant portion of the grade.
 
 
-## Marks
+## Marks (2022W1)
 
 We will use a simplified marking method this term. I will leave the previous
 marking process below for you, so you know what you're missing. **Do** keep the
@@ -504,54 +504,3 @@ The evaluation of your submission consists of several parts:
 - **30%**: automatic testing of your RTL code (your `*.sv`)
 - **20%**: automatic testing of your testbenches and how much of your code they cover (your `tb_*.sv` and `*.sv`)
 - **50%**: automatic testing of the synthesized netlist (synthesized from your `*.sv`)
-
-If you did not submit your code to GitHub or did not tell us your GitHub username **before the lab due date** (see Canvas), you will receive **0 marks**.
-
-
-#### Task 2 [2 marks]
-
-Deliverables in folder `task1` (yes, that says task1):
-
-- Modified `card7seg.sv`
-- Modified `tb_card7seg.sv`
-- Any other modified/added source or test files for your design
-
-For feedback only (no grades), an early deadline will be set for this task. If
-you submit code before this deadline, the TA will run the autograder and push a
-report back for you to examine.  This early deadline is for feedback only; it
-is not worth any grades. This task will be marked only after the final
-submission.
-
-#### Task 4 [2 marks]
-
-Deliverables in folder `task4`:
-
-- Modified `card7seg.sv`
-- Modified `statemachine.sv`
-- Modified `scorehand.sv`
-- Modified `datapath.sv`
-- Any other modified/added source or test files for your design
-
-The toplevel module of your design must be named `task4`.
-
-For feedback only (no grades), an early deadline will be set for this task. If
-you submit code before this deadline, the TA will run the autograder and push a
-report back for you to examine.  This early deadline is for feedback only; it
-is not worth any grades. This task will be marked only after the final
-submission.
-
-#### Task 5 [6 marks]
-
-Deliverables in folder `task5`:
-
-- Modified `card7seg.sv`
-- Modified `statemachine.sv`
-- Modified `scorehand.sv`
-- Modified `datapath.sv`
-- Modified `tb_statemachine.sv`
-- Modified `tb_scorehand.sv`
-- Modified `tb_datapath.sv`
-- Modified `tb_task5.sv`
-- Any other modified/added source or test files for your design
-
-The toplevel module of your design must be named `task5`.
