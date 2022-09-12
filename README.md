@@ -15,11 +15,14 @@
   * [Task 4: Understand the hardware components](#task-4-understand-the-components-of-our-circuit)
   * [Task 5: Baccarat code and testbenches](#task-5-baccarat-code-and-testbenches)
   * [Task 6: Verify your design on a DE1\-SoC board](#task-6-verify-your-design-on-a-de1-soc-board)
+* [Simulation and Code Coverage with ModelSim](#simulation-and-code-coverage-with-modelsim)
+  * [SSH Access](#using-ssh)
 * [Deliverables and Evaluation](#deliverables-and-evaluation)
   * [Using GitHub](#using-github)
-  * [Automatic testing](#automatic-testing)
+  * [Code coverage](#code-coverage)
   * [Post\-synthesis simulation](#post-synthesis-simulation)
-  * [Marks](#marks)
+  * [Automatic testing](#automatic-testing)
+* [Marks](#marks)
 
 
 ## Introduction
@@ -230,6 +233,90 @@ Test your design by downloading it to the board and demo the working circuit to 
 Remember to **commit** and **push** your `.sv` files to GitHub **before the deadline**. If you forget this, you will receive 0 marks for the lab. If your design works, you do not need to demo the datapath and state machine separately, just the entire design. However, if you are unable to get a working design, you should prepare to demo as many subunits on the DE1-SoC board as possible to the TA.
 
 
+
+## Simulation and Code Coverage with ModelSim
+
+Code coverage determines what proportion of your Verilog design has actually
+been activated (aka "run") after simulation with your testbench completes. This
+is always the result from running your testbench -- making your testbench more
+complete will result in higher coverage.
+
+Coverage can measure coverage of statements, branches, toggle bins, and more.
+The goal of good simulation is to get each of these up to 100%.
+
+Statement coverage shows the percentage of statements that have been executed
+at least once during the testbench.  For example, if several logic statements
+are protected by an if clause that is never activated throughout the
+simulation, then those statements do not count as being covered.
+
+Branches refer to the number of different execution paths that can be taken for
+an if/else or case statement. For example, a case statement with 4 cases and a
+default would have 5 branches. Even if you omit a default branch, ModelSim
+still thinks it is there and counts it in terms of coverage.
+
+Node coverage is reported in toggle bins. Each wire or node in your design has
+two toggle bins, changing 0 to 1 or from 1 to 0, so there are twice as many
+toggle bins as nodes. The report counts what proportion of these bins have been
+activated at least once by the simulation.
+
+ModelSim will also report coverage of the testbench file itself, but we never
+look at this.  The tools also report coverage of all instances (full
+hierarchy); your testbench should exercise as much of the complete hierarchy as
+possible.
+
+The free version of ModelSim that you installed with Quartus cannot measure
+coverage. You may be able to access the commercial version ModelSim with a
+license to run coverage, but this only runs on UBC servers. Ask your instructor
+for details.
+
+Here are the steps for running code coverage:
+
+1. `$ ssh ssh-soc.ece.ubc.ca` (see SSH Access below)
+2. `$ git clone https://<yourID>@github.com/UBC-CPEN311-Classrooms/2022w1-lab1-<yourID>.git`
+3. `$ source /CMC/scripts/mentor.modelsim.10.7c.csh`
+4. Go to each task directory (eg, `task4`), and run the commands below.
+5. `$ vlib work`
+6. `$ vlog -l <dut>.rtl-vlog.rpt -cover bts -sv [tb files(s)] [dut file(s)]`
+7. `$ vsim -l tb_<dut>.rtl-vsim.rpt -c -coverage -do 'run <# ticks>; coverage report -file tb_<dut>.stats.rpt; quit' tb_<dut>`
+
+The `vlib` command creates a new modelsim designl ibrary. The `vlog` command
+compiles your code. The `vsim` command runs the testbench simulation.  The
+`bts` flag above tells ModelSim to report branches, toggle bins, and
+statements. You can also try `e`xpression, `c`condition, and `x` for extended
+toggle statistics.
+
+For `tb_task5`, you can copy and paste below (except replace GITHUBID with your github name):
+
+```
+git clone https://GITHUBID@github.com/UBC-CPEN311-Classrooms/2022w1-lab-1-GITHUBID
+source /CMC/scripts/mentor.modelsim.10.7c.csh
+vlib work
+vlog -l tb_task5.rtl-vlog.rpt -cover bts -sv tb_task5.sv task5.sv card7seg.sv datapath.sv dealcard.sv reg4.sv scorehand.sv statemachine.sv
+vsim -l tb_task5.rtl-vsim.rpt -c -coverage -do 'run 1000000; coverage report -file tb_task5.stats.rpt; quit' tb_task5
+less tb_task5.stats.rpt
+```
+
+For more detailed output, add `-lines`, and to ensure your testbench runs completely use `-all`:
+
+```
+vsim -l tb_task5.rtl-vsim.rpt -c -coverage -do 'run -all; coverage report -file tb_task5.stats.rpt -lines; quit' tb_task5
+less tb_task5.stats.rpt
+```
+
+### SSH Access
+
+You can only access `ssh-soc.ece.ubc.ca` va ssh if you are already on the UBC
+network (from a lab, from residence, etc). If you are at home, you must first
+connect using UBC's VPN service, or indirectly by first connecting via ssh to
+`ssh.ece.ubc.ca`.
+
+For UBC VPN access, see:
+[https://it.ubc.ca/services/email-voice-internet/myvpn/setup-documents](https://it.ubc.ca/services/email-voice-internet/myvpn/setup-documents).
+
+You can run the ModelSim GUI if you use the X windows protocol:
+[https://help.ece.ubc.ca/X2go](https://help.ece.ubc.ca/X2go).
+
+
 ## Deliverables and Evaluation
 
 ### Using GitHub
@@ -246,15 +333,35 @@ If you prefer, you may use the GitHub Desktop interface or another GUI instead o
 
 **WARNING: If you do not push the repository to GitHub, your lab will not be submitted and you will receive 0 marks for this lab.**
 
-You must push your changes **before the deadline**. GitHub will automatically copy the state of your (remote) repository as it appears at the deadline time, and that will be considered your submission.
+You must push your changes **before the deadline**. GitHub will automatically
+copy the state of your (remote) repository as it appears at the deadline time,
+and that will be considered your submission.
 
-We strongly encourage you to commit and perhaps push changes as you make progress. This is good development practice — this way, if you mess up and need a previously working version, you can revert your files to a version you committed earlier. To mark your lab, we will only examine the last version commit pushed before the deadline, so don't worry about how messy your in-progress commits might look.
+We strongly encourage you to commit and perhaps push changes as you make
+progress. This is good development practice — this way, if you mess up and need
+a previously working version, you can revert your files to a version you
+committed earlier. To mark your lab, we will only examine the last version
+commit pushed before the deadline, so don't worry about how messy your
+in-progress commits might look.
 
-You should commit **only** source files (in this lab, `.sv` files), and, optionally, the post-synthesis netlist files generated by Quartus (the `.vo` files). You do **not** need to commit the bitfile for programming the FPGA (e.g., .sof files), waveform dumps, temporary files, and so forth. In particular, be careful to not submit any **extra** `.sv` files that your design does not use; our testing environment will process your submission [as described below](#automatic-testing) and extra files that do not compile will cause you to **fail** the tests. If you are using the virtual DE1-SoC for testing, **do not** copy and submit any of the files from the `de1_gui` folder; doing so will also cause you to fail the tests.
+You should commit **only** source files (in this lab, `.sv` files), and,
+optionally, the post-synthesis netlist files generated by Quartus (the `.vo`
+files). You do **not** need to commit the bitfile for programming the FPGA
+(e.g., .sof files), waveform dumps, temporary files, and so forth. In
+particular, be careful to not submit any **extra** `.sv` files that your design
+does not use; our testing environment will process your submission
+[as described below](#automatic-testing) and extra files that do not compile will
+cause you to **fail** the tests. If you are using the virtual DE1-SoC for
+testing, **do not** copy and submit any of the files from the `de1_gui` folder;
+doing so will also cause you to fail the tests.
 
-Any template files we give you (e.g., `card7seg.sv`) should be directly modified and committed using **the same filename**, rather than copied and modified.
+Any template files we give you (e.g., `card7seg.sv`) should be directly
+modified and committed using **the same filename**, rather than copied and
+modified.
 
-NOTE 1: The repository created for you when you follow the assignment link is private by default. **Do not** make it public — that would violate the academic honesty rules for this course.
+NOTE 1: The repository created for you when you follow the assignment link is
+private by default. **Do not** make it public — that would violate the academic
+honesty rules for this course.
 
 NOTE 2: We may be experimenting with a new GitHub Classroom feature that
 simplifies TAs/instructor feedback. When it creates the remote lab repository
@@ -275,30 +382,29 @@ responding to that feedback. You can also push new commits, and these are
 automatically folded in to the pull request to show improvements.
 
 
+### Code coverage
+
+TAs will ask you to show a coverage report for your each of modules, and the
+entire design.  They will expect to see close to 100% coverage.
+
+Check in a `*.stats.rpt` code coverage report file for each testbench.
+
+
+### Post-synthesis simulation
+
+Be sure to exhaustively test **both** the SystemVerilog RTL code you write and the post-synthesis netlist Verilog file produced by Quartus (see the Tutorial). It is **entirely possible** to write “unsynthesizable” RTL that works “in simulation” but either fails to synthesize or synthesizes into something that behaves differently. We will be assigning marks for **both** your RTL and the netlist we synthesize from it.
+
+Optionally, you may include the post-synthesis netlist (`.vo` file) you generated from Quartus. We will not use it for marking, but it can provide evidence in the unlikely event that you need to appeal your marks.
+
+
 ### Automatic testing
 
-We will be marking your code via an automatic testing infrastructure. Your autograder marks depend upon two things
+In the past, the course placed a heavy emphasis on automated testing of labs.
+This section is left here for legacy purposes.
 
-1. The percentage of **our** testcases that pass.
-2. The percentage of coverage using **your** testbenches.
-
-The autograder marks may also depend upon how many test cases are exercised by
-your testbench(es).
-
-For coverage, we measure coverage of both statements and branches. To achieve
-coverage of a statement, that statement must executed at least once during the
-testbench.  Branches refer to the number of different execution paths that can
-be taken, e.g. a case statemetn with 4 cases and a default would have 5
-branches (even if you omit a default branch, ModelSim still thinks it is there
-and counts it).  an if/else or case clause.  Although the tools report coverage
-of a testbench file (coverage of itself), we never look at that. The tools also
-report coverage of all instances (full hierarchy); your testbench should
-exercise as much of the complete hierarchy as possible.  The free version of
-ModelSim that you installed with Quartus cannot measure coverage. You may be
-able to access the commercial version ModelSim with a license to run coverage,
-but this only runs on UBC servers. Ask your instructor for details.
-
-It is essential that you understand how this works so that you submit the correct files — if our testsuite is unable to compile and test your code, you will not receive marks.
+It is essential that you understand how this works so that you submit the
+correct files — if our testsuite is unable to compile and test your code, you
+will not receive marks.
 
 The testsuite evaluates each task separately. For each design task folder (e.g., `task5`), it collects all Verilog files (`*.sv`) that do not begin with `tb_` and compiles them **all together**, both using Modelsim and using Quartus. Separately, each required `tb_*.sv` file is compiled with the relevant `*.sv` design files. This means that
 
@@ -318,30 +424,38 @@ Tests will be done first on the RTL code you submit (the `.sv` files). The autog
 If your code does not compile and simulate in ModelSim or does not synthesize in Quartus under these conditions (e.g., because of syntax errors, misconnected ports, or missing files, non-synthesizable RTL), you will receive **0 marks** for the relevant portion of the grade.
 
 
-### Post-synthesis simulation
+## Marks
 
-Be sure to exhaustively test **both** the SystemVerilog RTL code you write and the post-synthesis netlist Verilog file produced by Quartus (see the Tutorial). It is **entirely possible** to write “unsynthesizable” RTL that works “in simulation” but either fails to synthesize or synthesizes into something that behaves differently. We will be assigning marks for **both** your RTL and the netlist we synthesize from it.
+We will use a simplified marking method this term. I will leave the previous
+marking process below for you, so you know what you're missing. **Do** keep the
+file names and structure as per the instructions in the "Old Marking Process"
+shown below.
 
-Optionally, you may include the post-synthesis netlist (`.vo` file) you generated from Quartus. We will not use it for marking, but it can provide evidence in the unlikely event that you need to appeal your marks.
-
-
-### Marks
-
-We will use a simplified marking method this term. I will leave the previous marking process below for you, so you know what you're missing. **Do** keep the file names and structure as per the instructions in the "Old marking process".
 Your grade for lab 1 will have two components:
-1. Demo and interview on Friday, during the lab session (you will have to book an appointment with a TA): 10 marks
+1. Demo and interview during your lab session: 10 marks
 2. Code quality check: 5 marks
 
-The demo/interview will consist of your demonstrating the Baccarat game to the TA, and answering questions related to your code. You will have approximatively 10 minutes. 
+The demo/interview will consist of your demonstrating the Baccarat game to the
+TA, and answering questions related to your code.  You will have
+approximatively 10 minutes.  You will have to show working simulation as well
+as coverage reports for as many tasks as you have completed.
+
 Code quality will be checked as well for your Github classroom submission. Details to pay attention to:
 - code readability
 - comments to indicate purpose at the top of each source file and explanations for all modules, processes (**always** blocks)
 - compliance with the three synthesizable patterns indicated in lecture 
-- correct use of behavioural SV (i.e., if you design your hardware by hand and then instantiate gates, registers, muxes etc., you will lose marks)
+- correct use of behavioural SV (i.e., if you instantiate low-level gates, registers, muxes etc., you will lose marks)
 
-We will also provide a submission completeness check to make sure you did not miss any files from your Github classroom submission. If you submit your lab 1 before Wednesday, 11.59pm, you will get a notification on Thursday morning about any potentially missing files from your submitted lab assignment. The goal of this service is to encourage you to finish your lab early, and to avoid late submissions (and consequently loss of marks).
+We will also provide a submission completeness check to make sure you did not
+miss any files from your Github classroom submission. If you submit your lab 1
+by 11:59pm on the Friday night before the first lab marking session (Monday),
+you will get a notification on the weekend about any potentially missing files
+from your submitted lab assignment. The goal of this service is to encourage
+you to finish your lab early, and to avoid late submissions (and consequently
+loss of marks). This service will not be performed in future labs.
 
-==Old marking process below==
+
+### Old Marking Process (not used 2022W1)
 
 The evaluation of your submission consists of several parts:
 - **30%**: automatic testing of your RTL code (your `*.sv`)
