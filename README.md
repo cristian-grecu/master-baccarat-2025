@@ -285,12 +285,20 @@ for details.
 Here are the steps for running code coverage:
 
 1. `$ ssh ssh-soc.ece.ubc.ca` (see SSH Access below)
-2. `$ git clone https://<yourID>@github.com/UBC-CPEN311-Classrooms/2022w1-lab1-<yourID>.git`
-3. `$ source /CMC/scripts/mentor.modelsim.10.7c.csh`
-4. Go to each task directory (eg, `task4`), and run the commands below.
-5. `$ vlib work`
-6. `$ vlog -l <dut>.rtl-vlog.rpt -cover bts -sv [tb files(s)] [dut file(s)]`
-7. `$ vsim -l tb_<dut>.rtl-vsim.rpt -c -coverage -do 'run <# ticks>; coverage report -file tb_<dut>.stats.rpt; quit' tb_<dut>`
+1. `$ git clone https://<yourID>@github.com/UBC-CPEN311-Classrooms/2022w1-lab1-<yourID>.git`
+1. `$ exec tcsh`
+1. `% source /CMC/scripts/mentor.modelsim.10.7c.csh`
+1. `$ exec bash`
+1. Go to each task directory (eg, `task4`), and run the commands below.
+1. `$ vlib work`
+1. `$ vlog -l <dut>.rtl-vlog.rpt -cover bts -sv [tb files(s)] [dut file(s)]`
+1. `$ vsim -l tb_<dut>.rtl-vsim.rpt -c -coverage -do 'run <# ticks>; coverage report -file tb_<dut>.stats.rpt; quit' tb_<dut>`
+
+When you run `exec tcsh`, the Linux prompt changes to indicate that you are now
+using the tcsh command-line interpreter. In this environment, the command line
+may respond differently to certain edit keystrokes and commands.  The tcsh
+environment is only needed to run the setup script for modelsim; the `exec
+bash` returns you back to the default bash command-line interpreter right away.
 
 The `vlib` command creates a new modelsim designl ibrary. The `vlog` command
 compiles your code. The `vsim` command runs the testbench simulation.  The
@@ -302,7 +310,9 @@ For `tb_task5`, you can copy and paste below (except replace GITHUBID with your 
 
 ```
 git clone https://GITHUBID@github.com/UBC-CPEN311-Classrooms/2022w1-lab-1-GITHUBID
+exec tcsh
 source /CMC/scripts/mentor.modelsim.10.7c.csh
+exec bash
 vlib work
 vlog -l tb_task5.rtl-vlog.rpt -cover bts -sv tb_task5.sv task5.sv card7seg.sv datapath.sv dealcard.sv reg4.sv scorehand.sv statemachine.sv
 vsim -l tb_task5.rtl-vsim.rpt -c -coverage -do 'run 1000000; coverage report -file tb_task5.stats.rpt; quit' tb_task5
