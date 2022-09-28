@@ -316,6 +316,13 @@ vsim -l tb_task5.rtl-vsim.rpt -c -coverage -do 'run -all; coverage report -file 
 less tb_task5.stats.rpt
 ```
 
+<!-- With the post-synthesis netlist, you may need:
+FIXME: does this work on ssh-soc for coverage? or only on local PC?
+```
+vsim -gui -l msim_transcript -L cyclonev_ver -L altera_ver -L altera_lnsim_ver -L 220model_ver -L altera_mf_ver -L work work.tb_task4
+```
+-->
+
 ### SSH Access
 
 You can only access `ssh-soc.ece.ubc.ca` va ssh if you are already on the UBC
@@ -323,12 +330,16 @@ network (from a lab, from residence, etc). If you are at home, you must first
 connect using UBC's VPN service, or indirectly by first connecting via ssh to
 `ssh.ece.ubc.ca`.
 
+To get your ECE account and (reset) your password, go to:
+[https://id.ece.ubc.ca](https://id.ece.ubc.ca).
+
 For UBC VPN access, see:
 [https://it.ubc.ca/services/email-voice-internet/myvpn/setup-documents](https://it.ubc.ca/services/email-voice-internet/myvpn/setup-documents).
 
 You can run the ModelSim GUI if you use the X windows protocol:
 [https://help.ece.ubc.ca/X2go](https://help.ece.ubc.ca/X2go).
 
+You can also dump waveform files to a file, transfer the file to your PC, then load the waveforms into ModelSim on your local PC.
 
 ## Deliverables and Evaluation
 
@@ -421,7 +432,7 @@ marking process below for you, so you know what you're missing. **Do** keep the
 file names and structure as per the instructions in the "Old Marking Process"
 shown below.
 
-Your grade for lab 1 will have two components:
+Your grade will have two components:
 1. Demo and interview during your lab session: 10 marks (breakdown by task below)
 2. Code quality check: grade multiplier 0.0 to 1.5
 
@@ -439,6 +450,7 @@ grade is 15 out of 15 marks.  Details to pay attention to are:
 - comments to indicate purpose at the top of each source file and explanations for all modules, processes (**always** blocks)
 - compliance with the three synthesizable patterns indicated in lecture 
 - correct use of behavioural Verilog (i.e., if you instantiate low-level gates, registers, muxes etc., you will lose marks)
+- completeness of testbenches and code coverage reports
 
 <!--
 We will also provide a submission completeness check to make sure you did not
@@ -488,7 +500,7 @@ Deliverables in folder `task5`:
 
 The toplevel module of your design must be named `task5`.
 
-### Old Marking Process (not used 2022W1)
+### Autograder Marking Process (not used 2022W1)
 
 In the past, the course placed a heavy emphasis on automated testing of labs.
 This section is left here for legacy purposes.  **In particular, you should
