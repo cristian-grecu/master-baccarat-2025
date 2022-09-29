@@ -506,6 +506,7 @@ Deliverables in folder `task5`:
 - Modified `tb_scorehand.sv`
 - Modified `tb_datapath.sv`
 - Modified `tb_task5.sv`
+- All `*.stats.rpt` files showing coverage results for all testbench files.
 - Any other modified/added source or test files for your design
 
 The toplevel module of your design must be named `task5`.
