@@ -300,7 +300,7 @@ may respond differently to certain edit keystrokes and commands.  The tcsh
 environment is only needed to run the setup script for modelsim; the `exec
 bash` returns you back to the default bash command-line interpreter right away.
 
-The `vlib` command creates a new modelsim designl ibrary. The `vlog` command
+The `vlib` command creates a new modelsim design library. The `vlog` command
 compiles your code. The `vsim` command runs the testbench simulation.  The
 `bts` flag above tells ModelSim to report branches, toggle bins, and
 statements. You can also try `e`xpression, `c`condition, and `x` for extended
