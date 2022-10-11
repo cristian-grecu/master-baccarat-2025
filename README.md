@@ -538,7 +538,12 @@ Deliverables in folder `task5`:
 
 The toplevel module of your design must be named `task5`.
 
-## Autograder Marking Process (not used 2022W1)
+
+
+## Autograder Marking Process
+
+The autograder will not be used in 2022W1. This section is kept intact for
+legacy purposes.
 
 In the past, the course placed a heavy emphasis on automated testing of labs.
 This section is left here for legacy purposes.  **In particular, you should
