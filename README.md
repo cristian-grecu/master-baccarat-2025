@@ -21,8 +21,9 @@
   * [Using GitHub](#using-github)
   * [Code coverage](#code-coverage)
   * [Post\-synthesis simulation](#post-synthesis-simulation)
-  * [Automatic testing](#automatic-testing)
-* [Marks](#marks)
+  * [Marks Breakdown](#marks-breakdown)
+* [Autograder Marking Process](#autograder-marking-process)
+  * [Autograder Marks](#marks)
 
 
 ## Introduction
@@ -202,9 +203,32 @@ You should be able to see that a hand can have a score in the range [0,9], thus 
 
 #### statemachine
 
-The state machine is the “brain” of our circuit. It has an active-low synchronous reset (called resetb) and is clocked by slow_clock (which is connected to KEY0). On each rising edge of slow_clock, the state machine advances one step through the algorithm, and asserts the appropriate control signals at each step. In this circuit, the control signals that the state machine controls are load_pcard1, load_pcard2, … load_dcard3. When it is time to deal the first card to the player, the state machine asserts load_pcard1, which as was described above, causes the first Reg4 block to load in a card (from the output of the dealcard block). During the cycle in which load_pcard1 is 1, all other load_pcard and load_dcard signals are 0, so that no other positions in either hand are updated. As the algorithm progresses, the state machine will generate the other control signals to be asserted at the appropriate times.
+The state machine is the “brain” of our circuit. It has an active-low
+synchronous reset (called resetb) and is clocked by slow_clock (which is
+connected to KEY0). On each rising edge of slow_clock, the state machine
+advances one step through the algorithm, and asserts the appropriate control
+signals at each step. In this circuit, the control signals that the state
+machine controls are load_pcard1, load_pcard2, … load_dcard3. When it is time
+to deal the first card to the player, the state machine asserts load_pcard1,
+which as was described above, causes the first Reg4 block to load in a card
+(from the output of the dealcard block). During the cycle in which load_pcard1
+is 1, all other load_pcard and load_dcard signals are 0, so that no other
+positions in either hand are updated. As the algorithm progresses, the state
+machine will generate the other control signals to be asserted at the
+appropriate times.
 
-As should be evident from the earlier discussion, the card drawing pattern depends on the dealer score and the player score (these are used to determine whether a third card is necessary) as well as the player’s third card (this is used to determine whether the dealer should receive a third card, as described in the rules). Therefore, pcard3, pscore, and dscore are inputs to the state machine.
+As should be evident from the earlier discussion, the card drawing pattern
+depends on the dealer score and the player score (these are used to determine
+whether a third card is necessary) as well as the player’s third card (this is
+used to determine whether the dealer should receive a third card, as described
+in the rules). Therefore, pcard3, pscore, and dscore are inputs to the state
+machine.
+
+**The state machine must be busy doing something every clock cycle. Do not
+insert `filler' / gap / no-op states. That is, your FSM should run in the
+minimum number of clock cycles needed by dealing a new card on _every_ clock
+cycle.  For example, you should not need separate clock cycles to score the
+hand and then act on the score.**
 
 
 #### initial implementation
@@ -279,8 +303,8 @@ possible.
 
 The free version of ModelSim that you installed with Quartus cannot measure
 coverage. You may be able to access the commercial version ModelSim with a
-license to run coverage, but this only runs on UBC servers. Ask your instructor
-for details.
+license to run coverage, but this only runs on UBC's `ssh-soc` servers.
+For access details, see [SSH Access](#ssh-access).
 
 Here are the steps for running code coverage:
 
@@ -335,10 +359,11 @@ vsim -gui -l msim_transcript -L cyclonev_ver -L altera_ver -L altera_lnsim_ver -
 
 ### SSH Access
 
-You can only access `ssh-soc.ece.ubc.ca` va ssh if you are already on the UBC
-network (from a lab, from residence, etc). If you are at home, you must first
-connect using UBC's VPN service, or indirectly by first connecting via ssh to
-`ssh.ece.ubc.ca`.
+To access the licensed ModelSim, you must be logged in to `ssh-soc.ece.ubc.ca`
+via ssh. You can only access that server if you are already on the UBC network
+such as a lab, residence, or UBC WiFi.  If you are away from UBC, eg at home,
+you must first connect either directly using UBC's VPN service, or indirectly
+using ssh to `ssh.ece.ubc.ca`.
 
 To get your ECE account and (reset) your password, go to:
 [https://id.ece.ubc.ca](https://id.ece.ubc.ca).
@@ -346,10 +371,15 @@ To get your ECE account and (reset) your password, go to:
 For UBC VPN access, see:
 [https://it.ubc.ca/services/email-voice-internet/myvpn/setup-documents](https://it.ubc.ca/services/email-voice-internet/myvpn/setup-documents).
 
-You can run the ModelSim GUI if you use the X windows protocol:
+You can also run the ModelSim GUI if you use the X windows protocol:
 [https://help.ece.ubc.ca/X2go](https://help.ece.ubc.ca/X2go).
 
-You can also dump waveform files to a file, transfer the file to your PC, then load the waveforms into ModelSim on your local PC.
+You can also dump waveform files to a file, transfer the file to your PC, then
+load the waveforms into ModelSim on your local PC.
+
+The easiest way to return the coverage report files to your local PC is to
+add/commit/push them to git on `ssh-soc`, and then pull them to your local PC.
+
 
 ## Deliverables and Evaluation
 
@@ -432,10 +462,7 @@ Optionally, you may include the post-synthesis netlist (`.vo` file) you generate
 
 
 
-
-
-
-## Marks
+### Marks Breakdown
 
 We will use a simplified marking method this term. I will leave the previous
 marking process below for you, so you know what you're missing. **Do** keep the
@@ -511,19 +538,12 @@ Deliverables in folder `task5`:
 
 The toplevel module of your design must be named `task5`.
 
-### Autograder Marking Process (not used 2022W1)
+## Autograder Marking Process (not used 2022W1)
 
 In the past, the course placed a heavy emphasis on automated testing of labs.
 This section is left here for legacy purposes.  **In particular, you should
 follow the rules below about not modifying filenames or module/port/signal
 declarations that have been provided to you.**
-
-
-The automated evaluation of your submission consists of several parts:
-- **30%**: automatic testing of your RTL code (your `*.sv`)
-- **20%**: automatic testing of your testbenches and how much of your code they cover (your `tb_*.sv` and `*.sv`)
-- **50%**: automatic testing of the synthesized netlist (synthesized from your `*.sv`)
-
 
 It is essential that you understand how this works so that you submit the
 correct files — if our testsuite is unable to compile and test your code, you
@@ -557,3 +577,9 @@ in Quartus under these conditions (e.g., because of syntax errors, misconnected
 ports, or missing files, non-synthesizable RTL), you will receive **0 marks**
 for the relevant portion of the grade.
 
+### Autograder Marks
+
+The automated evaluation of your submission consists of several parts:
+- **30%**: automatic testing of your RTL code (your `*.sv`)
+- **20%**: automatic testing of your testbenches and how much of your code they cover (your `tb_*.sv` and `*.sv`)
+- **50%**: automatic testing of the synthesized netlist (synthesized from your `*.sv`)
