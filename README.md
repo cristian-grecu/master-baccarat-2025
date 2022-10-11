@@ -23,7 +23,7 @@
   * [Post\-synthesis simulation](#post-synthesis-simulation)
   * [Marks Breakdown](#marks-breakdown)
 * [Autograder Marking Process](#autograder-marking-process)
-  * [Autograder Marks](#marks)
+  * [Autograder Marks](#autograder-marks)
 
 
 ## Introduction
