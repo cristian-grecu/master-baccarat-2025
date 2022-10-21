@@ -318,7 +318,8 @@ Here are the steps for running code coverage:
 1. `$ vlog -l <dut>.rtl-vlog.rpt -cover bts -sv [tb files(s)] [dut file(s)]`
 1. `$ vsim -L /CMC/tools/altera/19.1/modelsim_ase/altera/verilog/altera_mf -L /CMC/tools/altera/17.0/modelsim_ase/altera/verilog/cyclonev  -l tb_<dut>.rtl-vsim.rpt -c -coverage -do 'run <# ticks>; coverage report -file tb_<dut>.stats.rpt; quit' tb_<dut>`
 
-<!--
+
+<!---
 FIXME: the libraries linked in the above vsim command; e.g.
 	-L /CMC/tools/altera/19.1/modelsim_ase/altera/verilog/altera_mf
 	-L /CMC/tools/altera/17.0/modelsim_ase/altera/verilog/cyclonev
@@ -334,7 +335,8 @@ Finally, note that the cyclonev device specific file is included from Quartus
 17.0. This is due to some unfortunate Quartus versioning; it seems that 19.1
 on the server is the 'Pro' version, which doesn't include cyclonev support, and
 so we have to draw from 17.1, which is a 'Standard' version.
---!>
+--->
+
 
 When you run `exec tcsh`, the Linux prompt changes to indicate that you are now
 using the tcsh command-line interpreter. In this environment, the command line
