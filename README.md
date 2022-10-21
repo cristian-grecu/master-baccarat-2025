@@ -316,7 +316,25 @@ Here are the steps for running code coverage:
 1. Go to each task directory (eg, `task4`), and run the commands below.
 1. `$ vlib work`
 1. `$ vlog -l <dut>.rtl-vlog.rpt -cover bts -sv [tb files(s)] [dut file(s)]`
-1. `$ vsim -l tb_<dut>.rtl-vsim.rpt -c -coverage -do 'run <# ticks>; coverage report -file tb_<dut>.stats.rpt; quit' tb_<dut>`
+1. `$ vsim -L /CMC/tools/altera/19.1/modelsim_ase/altera/verilog/altera_mf -L /CMC/tools/altera/17.0/modelsim_ase/altera/verilog/cyclonev  -l tb_<dut>.rtl-vsim.rpt -c -coverage -do 'run <# ticks>; coverage report -file tb_<dut>.stats.rpt; quit' tb_<dut>`
+
+<!--
+FIXME: the libraries linked in the above vsim command; e.g.
+	-L /CMC/tools/altera/19.1/modelsim_ase/altera/verilog/altera_mf
+	-L /CMC/tools/altera/17.0/modelsim_ase/altera/verilog/cyclonev
+are required to get Intel/Altera specific content included when running the
+standalone installation of ModelSim on the ssh-soc server. Note that altera_mf
+if only required if the design includes an Altera megafunction, and cyclonev
+is only required to simulate post-synthesis. This means that neither include
+is strictly required for this lab, however it should be ok to include them
+here, and it means that this exact command can be copy and pasted for subsequent
+labs.
+
+Finally, note that the cyclonev device specific file is included from Quartus
+17.0. This is due to some unfortunate Quartus versioning; it seems that 19.1
+on the server is the 'Pro' version, which doesn't include cyclonev support, and
+so we have to draw from 17.1, which is a 'Standard' version.
+--!>
 
 When you run `exec tcsh`, the Linux prompt changes to indicate that you are now
 using the tcsh command-line interpreter. In this environment, the command line
@@ -339,7 +357,7 @@ source /CMC/scripts/mentor.modelsim.10.7c.csh
 exec bash
 vlib work
 vlog -l tb_task5.rtl-vlog.rpt -cover bts -sv tb_task5.sv task5.sv card7seg.sv datapath.sv dealcard.sv reg4.sv scorehand.sv statemachine.sv
-vsim -l tb_task5.rtl-vsim.rpt -c -coverage -do 'run 1000000; coverage report -file tb_task5.stats.rpt; quit' tb_task5
+vsim -L /CMC/tools/altera/19.1/modelsim_ase/altera/verilog/altera_mf -L /CMC/tools/altera/17.0/modelsim_ase/altera/verilog/cyclonev -l tb_task5.rtl-vsim.rpt -c -coverage -do 'run 1000000; coverage report -file tb_task5.stats.rpt; quit' tb_task5
 less tb_task5.stats.rpt
 ```
 
